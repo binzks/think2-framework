@@ -1,4 +1,4 @@
-package org.think2framework.core.exception;
+package org.think2framework.web.exception;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
+import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.utils.HttpServletUtils;
 import org.think2framework.core.utils.StringUtils;
 

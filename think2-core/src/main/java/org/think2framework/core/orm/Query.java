@@ -1,21 +1,19 @@
 package org.think2framework.core.orm;
 
+import java.util.*;
+
 import org.think2framework.core.Constants;
 import org.think2framework.core.bean.Column;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
 import org.think2framework.core.bean.Order;
+import org.think2framework.core.exception.NonExistException;
 import org.think2framework.core.orm.bean.SqlObject;
 import org.think2framework.core.orm.database.Database;
+import org.think2framework.core.orm.database.Operator;
 import org.think2framework.core.orm.database.Redis;
-import org.think2framework.core.exception.DatabaseException;
 import org.think2framework.core.utils.JsonUtils;
 import org.think2framework.core.utils.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 查询生成器
@@ -452,7 +450,7 @@ public class Query {
 	private String getColumnKeySql(String name, Boolean alias) {
 		Column column = columns.get(name);
 		if (null == column) {
-			throw new DatabaseException("Failed to generate column key sql, column " + name + " is not exist");
+			throw new NonExistException("字段[" + name + "]");
 		}
 		StringBuilder sql = new StringBuilder();
 		sql.append(StringUtils.isBlank(column.getJoin()) ? Constants.MAIN_TABLE_ALIAS : column.getJoin()).append(".")
@@ -570,13 +568,13 @@ public class Query {
 	 *
 	 * @param key
 	 *            过滤字段名称
-	 * @param type
-	 *            过滤类型
+	 * @param operator
+	 *            运算符
 	 * @param values
 	 *            过滤值
 	 */
-	public void filter(String key, String type, Object... values) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), type, Arrays.asList(values)));
+	public void filter(String key, Operator operator, Object... values) {
+		this.filters.add(new Filter(getColumnKeySql(key, false), operator, Arrays.asList(values)));
 	}
 
 	/**
@@ -586,7 +584,7 @@ public class Query {
 	 *            过滤值
 	 */
 	public void eq(Object value) {
-		this.filters.add(new Filter(pk, "=", Arrays.asList(value)));
+		this.filters.add(new Filter(pk, Operator.EQUAL, Arrays.asList(value)));
 	}
 
 	/**
@@ -598,7 +596,7 @@ public class Query {
 	 *            过滤值
 	 */
 	public void eq(String key, Object value) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "=", Arrays.asList(value)));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.EQUAL, Arrays.asList(value)));
 	}
 
 	/**
@@ -610,7 +608,7 @@ public class Query {
 	 *            过滤值
 	 */
 	public void ne(String key, Object value) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "<>", Arrays.asList(value)));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.NOT_EQUAL, Arrays.asList(value)));
 	}
 
 	/**
@@ -622,7 +620,7 @@ public class Query {
 	 *            过滤值
 	 */
 	public void gt(String key, Object value) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), ">", Arrays.asList(value)));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.GREATER_THAN, Arrays.asList(value)));
 	}
 
 	/**
@@ -634,7 +632,7 @@ public class Query {
 	 *            过滤值
 	 */
 	public void ge(String key, Object value) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), ">=", Arrays.asList(value)));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.GREATER_EQUAL, Arrays.asList(value)));
 	}
 
 	/**
@@ -646,7 +644,7 @@ public class Query {
 	 *            过滤值
 	 */
 	public void lt(String key, Object value) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "<", Arrays.asList(value)));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.LESS_THAN, Arrays.asList(value)));
 	}
 
 	/**
@@ -658,7 +656,7 @@ public class Query {
 	 *            过滤值
 	 */
 	public void le(String key, Object value) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "<=", Arrays.asList(value)));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.LESS_EQUAL, Arrays.asList(value)));
 	}
 
 	/**
@@ -668,7 +666,7 @@ public class Query {
 	 *            过滤字段名
 	 */
 	public void isNull(String key) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "is null", null));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.IS_NULL, null));
 	}
 
 	/**
@@ -678,7 +676,7 @@ public class Query {
 	 *            过滤字段名
 	 */
 	public void notNull(String key) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "is not null", null));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.NOT_NULL, null));
 	}
 
 	/**
@@ -690,7 +688,7 @@ public class Query {
 	 *            过滤值
 	 */
 	public void in(String key, Object... values) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "in", Arrays.asList(values)));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.IN, Arrays.asList(values)));
 	}
 
 	/**
@@ -702,7 +700,7 @@ public class Query {
 	 *            过滤值
 	 */
 	public void notIn(String key, Object... values) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "not in", Arrays.asList(values)));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.NOT_IN, Arrays.asList(values)));
 	}
 
 	/**
@@ -716,7 +714,7 @@ public class Query {
 	 *            结束值
 	 */
 	public void between(String key, Object begin, Object end) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "between", Arrays.asList(begin, end)));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.BETWEEN, Arrays.asList(begin, end)));
 	}
 
 	/**
@@ -728,7 +726,7 @@ public class Query {
 	 *            过滤值
 	 */
 	public void like(String key, Object value) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "like", Arrays.asList(value)));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.LIKE, Collections.singletonList(value)));
 	}
 
 	/**
@@ -740,7 +738,7 @@ public class Query {
 	 *            过滤值
 	 */
 	public void notLike(String key, Object value) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "not like", Arrays.asList(value)));
+		this.filters.add(new Filter(getColumnKeySql(key, false), Operator.NOT_LIKE, Collections.singletonList(value)));
 	}
 
 	/**
@@ -752,7 +750,8 @@ public class Query {
 	 *            过滤值
 	 */
 	public void leftLike(String key, Object value) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "like", Arrays.asList("%" + value)));
+		this.filters
+				.add(new Filter(getColumnKeySql(key, false), Operator.LIKE, Collections.singletonList("%" + value)));
 	}
 
 	/**
@@ -764,7 +763,8 @@ public class Query {
 	 *            过滤值
 	 */
 	public void rightLike(String key, Object value) {
-		this.filters.add(new Filter(getColumnKeySql(key, false), "like", Arrays.asList(value + "%")));
+		this.filters
+				.add(new Filter(getColumnKeySql(key, false), Operator.LIKE, Collections.singletonList(value + "%")));
 	}
 
 }

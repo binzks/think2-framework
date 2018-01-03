@@ -1,9 +1,12 @@
 package org.think2framework.core.orm.database;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.util.*;
+
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -11,35 +14,30 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.think2framework.core.bean.Column;
 import org.think2framework.core.orm.ClassUtils;
 import org.think2framework.core.orm.bean.SqlObject;
-import org.think2framework.core.exception.DatabaseException;
 import org.think2framework.core.utils.StringUtils;
-
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.util.*;
 
 public abstract class AbstractDatabase implements Database {
 
 	private static final Logger logger = LogManager.getLogger(AbstractDatabase.class); // log4j日志对象
 
-    private JdbcTemplate jdbcTemplate; //spring JdbcTemplate
+	private JdbcTemplate jdbcTemplate; // spring JdbcTemplate
 
-    public AbstractDatabase(Integer minIdle, Integer maxIdle, Integer initialSize, Integer timeout, 
-                  String username, String password, String driver, String url) {
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setMinIdle(minIdle);
-        basicDataSource.setMaxIdle(maxIdle);
-        basicDataSource.setInitialSize(initialSize);
-        basicDataSource.setRemoveAbandonedOnBorrow(true);
-        basicDataSource.setRemoveAbandonedTimeout(timeout);
-        basicDataSource.setLogAbandoned(true);
-        basicDataSource.setValidationQuery("SELECT 1");
-        basicDataSource.setDriverClassName(driver);
-        basicDataSource.setUrl(url);
-        basicDataSource.setUsername(username);
-        basicDataSource.setPassword(password);
-        jdbcTemplate = new JdbcTemplate(basicDataSource);
-    }
+	public AbstractDatabase(Integer minIdle, Integer maxIdle, Integer initialSize, Integer timeout, String username,
+			String password, String driver, String url) {
+		BasicDataSource basicDataSource = new BasicDataSource();
+		basicDataSource.setMinIdle(minIdle);
+		basicDataSource.setMaxIdle(maxIdle);
+		basicDataSource.setInitialSize(initialSize);
+		basicDataSource.setRemoveAbandonedOnBorrow(true);
+		basicDataSource.setRemoveAbandonedTimeout(timeout);
+		basicDataSource.setLogAbandoned(true);
+		basicDataSource.setValidationQuery("SELECT 1");
+		basicDataSource.setDriverClassName(driver);
+		basicDataSource.setUrl(url);
+		basicDataSource.setUsername(username);
+		basicDataSource.setPassword(password);
+		jdbcTemplate = new JdbcTemplate(basicDataSource);
+	}
 
 	/**
 	 * 获取数据库字段生成sql语句的时候前缀
@@ -92,10 +90,10 @@ public abstract class AbstractDatabase implements Database {
 					jdbcTemplate.execute(createSql);
 					result = true;
 				} else {
-					throw new DatabaseException(e);
+					throw new RuntimeException(e);
 				}
 			} else {
-				throw new DatabaseException(e);
+				throw new RuntimeException(e);
 			}
 		}
 		return result;
@@ -119,26 +117,19 @@ public abstract class AbstractDatabase implements Database {
 	@Override
 	public Object insert(String sql, Boolean autoIncrement, Object... args) {
 		logger.debug("Insert sql: {} values: {} autoIncrement: {}", sql, args, autoIncrement);
-		try {
-			if (autoIncrement) {
-				KeyHolder keyHolder = new GeneratedKeyHolder();
-				jdbcTemplate.update(con -> {
-					PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-					for (int i = 0; i < args.length; i++) {
-						ps.setObject(i + 1, ClassUtils.getDatabaseValue(args[i]));
-					}
-					return ps;
-				}, keyHolder);
-				return keyHolder.getKey().intValue();
-			} else {
-				jdbcTemplate.update(sql, args);
-				return "";
-			}
-		} catch (DuplicateKeyException e) {// 如果是唯一性约束错误，转化为中文
-			String message = e.getMessage();
-			throw new DatabaseException(
-					"数据" + StringUtils.substring(message, StringUtils.indexOf(message, "Duplicate entry '") + 17,
-							StringUtils.indexOf(message, "' for key")) + "已存在！");
+		if (autoIncrement) {
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			jdbcTemplate.update(con -> {
+				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+				for (int i = 0; i < args.length; i++) {
+					ps.setObject(i + 1, ClassUtils.getDatabaseValue(args[i]));
+				}
+				return ps;
+			}, keyHolder);
+			return keyHolder.getKey().intValue();
+		} else {
+			jdbcTemplate.update(sql, args);
+			return "";
 		}
 	}
 

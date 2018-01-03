@@ -5,8 +5,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.think2framework.core.exception.DatabaseException;
-import org.think2framework.core.exception.MessageException;
+import org.think2framework.core.exception.NonExistException;
 import org.think2framework.core.orm.database.*;
 
 /**
@@ -23,7 +22,7 @@ public class DatabaseFactory {
 	/**
 	 * 清理数据库配置
 	 */
-	public static synchronized void clearDatabases() {
+	public static synchronized void clear() {
 		databases.clear();
 		logger.debug("All databases cleared successfully");
 	}
@@ -54,94 +53,37 @@ public class DatabaseFactory {
 	 * @param password
 	 *            数据库密码
 	 */
-	public static synchronized void appendDatabase(String type, String name, Integer minIdle, Integer maxIdle,
+	public static synchronized void append(String type, String name, Integer minIdle, Integer maxIdle,
 			Integer initialSize, Integer timeout, String db, String host, Integer port, String username,
 			String password) {
-		Type dbType;
-		try {
-			dbType = Type.valueOf(type.toUpperCase());
-		} catch (IllegalArgumentException e) {
-			throw new MessageException("");
-		}
-		if (Type.MYSQL == dbType) {
-			appendMysql(name, minIdle, maxIdle, initialSize, timeout, host, port, db, username, password);
-		} else if (Type.REDIS == dbType) {
-			appendRedis(name, minIdle, maxIdle, timeout, host, port, db, password);
-		} else if (Type.SQLSERVER == dbType) {
-			appendSqlserver(name, minIdle, maxIdle, initialSize, timeout, host, port, db, username, password);
-		} else if (Type.ORACLE == dbType) {
-			appendOracle(name, minIdle, maxIdle, initialSize, timeout, host, port, db, username, password);
-		} else if (Type.SQLITE == dbType) {
-			appendSqlite(name, minIdle, maxIdle, initialSize, timeout, host, port, db, username, password);
-		}
-	}
-
-	/**
-	 * 追加一个mysql数据源，如果已经存在则不再重新添加并警告
-	 */
-	public static synchronized void appendMysql(String name, Integer minIdle, Integer maxIdle, Integer initialSize,
-			Integer timeout, String host, Integer port, String database, String username, String password) {
-		if (null == databases.get(name)) {
-			databases.put(name, new Mysql(minIdle, maxIdle, initialSize, timeout,
-					host + (null == port ? "" : ":" + port), database, username, password));
-			logger.debug("Append mysql {} {} {}", host, database, username);
+		if (null != databases.get(name)) {
+			logger.warn("数据库[{}]已经存在，忽略追加！", name);
 		} else {
-			logger.warn("Mysql {} is already exist", name);
-		}
-	}
-
-	/**
-	 * 追加一个redis数据源，如果已经存在则不再重新添加并警告
-	 */
-	public static synchronized void appendRedis(String name, Integer minIdle, Integer maxIdle, Integer timeout,
-			String host, Integer port, String database, String password) {
-		if (null == redisMap.get(name)) {
-			redisMap.put(name, new Redis(minIdle, maxIdle, timeout, database, host, port, password));
-			logger.debug("Append redis {} {}", host, database);
-		} else {
-			logger.warn("Redis {} is already exist", name);
-		}
-	}
-
-	/**
-	 * 追加一个sqlserver数据源，如果已经存在则不再重新添加并警告
-	 */
-	public static synchronized void appendSqlserver(String name, Integer minIdle, Integer maxIdle, Integer initialSize,
-			Integer timeout, String host, Integer port, String database, String username, String password) {
-		if (null == databases.get(name)) {
-			databases.put(name, new Sqlserver(minIdle, maxIdle, initialSize, timeout,
-					host + (null == port ? "" : ":" + port), database, username, password));
-			logger.debug("Append sqlserver {} {} {}", host, database, username);
-		} else {
-			logger.warn("Sqlserver {} is already exist", name);
-		}
-	}
-
-	/**
-	 * 追加一个sqlite数据源，如果已经存在则不再重新添加并警告
-	 */
-	public static synchronized void appendSqlite(String name, Integer minIdle, Integer maxIdle, Integer initialSize,
-			Integer timeout, String host, Integer port, String database, String username, String password) {
-		if (null == databases.get(name)) {
-			databases.put(name, new Sqlite(minIdle, maxIdle, initialSize, timeout,
-					host + (null == port ? "" : ":" + port), database, username, password));
-			logger.debug("Append sqlite {} {} {}", host, database, username);
-		} else {
-			logger.warn("Sqlite {} is already exist", name);
-		}
-	}
-
-	/**
-	 * 追加一个oracle数据源，如果已经存在则不再重新添加并警告
-	 */
-	public static synchronized void appendOracle(String name, Integer minIdle, Integer maxIdle, Integer initialSize,
-			Integer timeout, String host, Integer port, String database, String username, String password) {
-		if (null == databases.get(name)) {
-			databases.put(name, new Oracle(minIdle, maxIdle, initialSize, timeout,
-					host + (null == port ? "" : ":" + port), database, username, password));
-			logger.debug("Append oracle {} {} {}", host, database, username);
-		} else {
-			logger.warn("Oracle {} is already exist", name);
+			try {
+				Type dbType = Type.valueOf(type.toUpperCase());
+				if (Type.MYSQL == dbType) {
+					databases.put(name, new Mysql(minIdle, maxIdle, initialSize, timeout,
+							host + (null == port ? "" : ":" + port), db, username, password));
+					logger.debug("追加mysql[{}][{}][{}]！", host, db, username);
+				} else if (Type.REDIS == dbType) {
+					redisMap.put(name, new Redis(minIdle, maxIdle, timeout, db, host, port, password));
+					logger.debug("追加redis[{}][{}]！", host, db);
+				} else if (Type.SQLSERVER == dbType) {
+					databases.put(name, new Sqlserver(minIdle, maxIdle, initialSize, timeout,
+							host + (null == port ? "" : ":" + port), db, username, password));
+					logger.debug("追加sqlserver[{}][{}][{}]！", host, db, username);
+				} else if (Type.ORACLE == dbType) {
+					databases.put(name, new Oracle(minIdle, maxIdle, initialSize, timeout,
+							host + (null == port ? "" : ":" + port), db, username, password));
+					logger.debug("追加oracle[{}][{}][{}]！", host, db, username);
+				} else if (Type.SQLITE == dbType) {
+					databases.put(name, new Sqlite(minIdle, maxIdle, initialSize, timeout,
+							host + (null == port ? "" : ":" + port), db, username, password));
+					logger.debug("追加sqlite[{}][{}][{}]！", host, db, username);
+				}
+			} catch (IllegalArgumentException e) {
+				logger.warn("不支持的数据库类型[{}]，忽略追加！", type);
+			}
 		}
 	}
 
@@ -155,7 +97,8 @@ public class DatabaseFactory {
 	public static Database getDatabase(String name) {
 		Database database = databases.get(name);
 		if (null == database) {
-			throw new DatabaseException(Database.class.getName() + " " + name + " is not exist");
+			logger.error("获取不存在的数据库[{}]", name);
+			throw new NonExistException("数据库[" + name + "]");
 		}
 		return database;
 	}
@@ -170,7 +113,8 @@ public class DatabaseFactory {
 	public static Redis getRedis(String name) {
 		Redis redis = redisMap.get(name);
 		if (null == redis) {
-			throw new DatabaseException(Redis.class.getName() + " " + name + " is not exist");
+			logger.error("获取不存在的redis[{}]", name);
+			throw new NonExistException("Redis[" + name + "]");
 		}
 		return redis;
 	}

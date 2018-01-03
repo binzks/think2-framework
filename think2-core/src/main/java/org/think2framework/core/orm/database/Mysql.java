@@ -9,7 +9,6 @@ import org.think2framework.core.bean.Column;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
 import org.think2framework.core.bean.Order;
-import org.think2framework.core.exception.DatabaseException;
 import org.think2framework.core.orm.bean.SqlObject;
 import org.think2framework.core.utils.StringUtils;
 
@@ -31,38 +30,38 @@ public class Mysql extends AbstractDatabase {
 	 *            过滤条件
 	 * @return sql和值
 	 */
-	public static SqlObject generateFilters(List<Filter> filters) {
+	private static SqlObject generateFilters(List<Filter> filters) {
 		StringBuilder sql = new StringBuilder();
 		List<Object> sqlValues = new ArrayList<>();
 		for (Filter filter : filters) {
 			List<Object> values = filter.getValues();
-			String type = filter.getType();
+			Operator operator = filter.getOperator();
 			sql.append(" AND ").append(filter.getKey()).append(" ");
-			if ("=".equalsIgnoreCase(type)) {
+			if (Operator.EQUAL == operator) {
 				if (null == values) {
-					throw new DatabaseException(type + " filter has no filter value");
+					throw new RuntimeException("运算符[=]没有过滤值！");
 				}
 				sql.append("= ?");
 				sqlValues.add(values.get(0));
-			} else if ("between".equalsIgnoreCase(type)) {
+			} else if (Operator.BETWEEN == operator) {
 				if (null == values || values.size() < 2) {
-					throw new DatabaseException(type + " filter need two filter values");
+					throw new RuntimeException("运算符[between]没有两个过滤值！");
 				}
 				sql.append("BETWEEN ? AND ?");
 				sqlValues.add(values.get(0));
 				sqlValues.add(values.get(1));
-			} else if ("in".equalsIgnoreCase(type) || "not in".equalsIgnoreCase(type)) {
+			} else if (Operator.IN == operator || Operator.NOT_IN == operator) {
 				if (null == values) {
-					throw new DatabaseException(type + " filter need filter values");
+					throw new RuntimeException("运算符[" + operator.toString() + "]没有过滤值！");
 				}
 				StringBuilder in = new StringBuilder();
 				for (Object value : values) {
 					in.append(",?");
 					sqlValues.add(value);
 				}
-				sql.append(type.toUpperCase()).append("(").append(in.substring(1)).append(")");
+				sql.append(operator.toString()).append("(").append(in.substring(1)).append(")");
 			} else {
-				sql.append(type.toUpperCase());
+				sql.append(operator.toString());
 				if (null != values) {
 					sql.append(" ?");
 					sqlValues.add(values.get(0));
@@ -202,7 +201,7 @@ public class Mysql extends AbstractDatabase {
 		if (null == columns || columns.size() == 0) {
 			return "";
 		}
-		StringBuffer sql = new StringBuffer();
+		StringBuilder sql = new StringBuilder();
 		for (Column column : columns.values()) {
 			sql.append(",")
 					.append(StringUtils.isBlank(column.getJoin()) ? Constants.MAIN_TABLE_ALIAS : column.getJoin())

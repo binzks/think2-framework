@@ -2,6 +2,8 @@ package org.think2framework.core.bean;
 
 import java.util.List;
 
+import org.think2framework.core.orm.database.Operator;
+
 /**
  * 查询实体的查询条件
  */
@@ -13,9 +15,9 @@ public class Filter {
 	private String key;
 
 	/**
-	 * 过滤类型= > <等
+	 * 运算符= > <等
 	 */
-	private String type;
+	private Operator operator;
 
 	/**
 	 * 过滤值数组
@@ -25,9 +27,9 @@ public class Filter {
 	public Filter() {
 	}
 
-	public Filter(String key, String type, List<Object> values) {
+	public Filter(String key, Operator operator, List<Object> values) {
 		this.key = key;
-		this.type = type;
+		this.operator = operator;
 		this.values = values;
 	}
 
@@ -39,12 +41,12 @@ public class Filter {
 		this.key = key;
 	}
 
-	public String getType() {
-		return type;
+	public Operator getOperator() {
+		return operator;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setOperator(Operator operator) {
+		this.operator = operator;
 	}
 
 	public List<Object> getValues() {

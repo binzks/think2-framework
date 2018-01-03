@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.think2framework.core.orm.DatabaseFactory;
 import org.think2framework.core.orm.Query;
 import org.think2framework.core.orm.Writer;
-import org.think2framework.core.support.Datasource;
 import org.think2framework.core.utils.FileUtils;
 import org.think2framework.core.utils.JsonUtils;
 import org.think2framework.core.utils.NumberUtils;
@@ -39,13 +38,13 @@ public class ModelFactory {
 			return;
 		}
 		if (clear) {
-			DatabaseFactory.clearDatabases();
+			DatabaseFactory.clear();
 		}
 		// 重新加载数据库
 		for (File file : files) {
 			List<Map<String, Object>> dss = JsonUtils.readFileToMapList(file);
 			for (Map<String, Object> ds : dss) {
-				DatabaseFactory.appendDatabase(StringUtils.toString(ds.get("type")),
+				DatabaseFactory.append(StringUtils.toString(ds.get("type")),
 						StringUtils.toString(ds.get("name")), NumberUtils.toInt(ds.get("minIdle"), 1),
 						NumberUtils.toInt(ds.get("maxIdle"), 2), NumberUtils.toInt(ds.get("initialSize"), 2),
 						NumberUtils.toInt(ds.get("timeout"), 300), StringUtils.toString(ds.get("db")),

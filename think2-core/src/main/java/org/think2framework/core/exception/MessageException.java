@@ -8,7 +8,7 @@ public class MessageException extends RuntimeException {
 	private String message; // 异常消息
 
 	public MessageException(String code, String... values) {
-		this.message = MessageFactory.createJsonMessage(code, values);
+		this.message = MessageFactory.getJson(code, values);
 	}
 
 	@Override

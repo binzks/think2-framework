@@ -1,17 +1,17 @@
 package org.think2framework.core.orm;
 
-import org.springframework.util.LinkedCaseInsensitiveMap;
-import org.think2framework.core.orm.bean.SqlObject;
-import org.think2framework.core.persistence.Column;
-import org.think2framework.core.exception.DatabaseException;
-import org.think2framework.core.utils.JsonUtils;
-import org.think2framework.core.utils.StringUtils;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+
+import org.springframework.util.LinkedCaseInsensitiveMap;
+import org.think2framework.core.exception.NonExistException;
+import org.think2framework.core.orm.bean.SqlObject;
+import org.think2framework.core.persistence.Column;
+import org.think2framework.core.utils.JsonUtils;
+import org.think2framework.core.utils.StringUtils;
 
 /**
  * 类工具,主要处理类字段,读取和写入,以及创建实例
@@ -112,7 +112,7 @@ public class ClassUtils {
 				}
 			}
 			if (null == field) {
-				throw new DatabaseException(clazz.getName() + " field " + name + " is not exist");
+				throw new RuntimeException(clazz.getName() + "字段[" + name + "]不存在！");
 			}
 		}
 		return field;
@@ -139,7 +139,7 @@ public class ClassUtils {
 				field.setAccessible(true);
 				value = field.get(instance);
 			} catch (IllegalAccessException e) {
-				throw new DatabaseException(e);
+				throw new RuntimeException(e);
 			}
 		}
 		return getDatabaseValue(value);
@@ -208,13 +208,13 @@ public class ClassUtils {
 					if (e.getSQLState().equals("S1000")) { // 表示ResultSet是空的,没有数据
 						return null;
 					} else if (!e.getSQLState().equals("S0022")) { // S0022表示字段name不存在
-						throw new DatabaseException(e);
+						throw new NonExistException(e);
 					}
 				}
 			}
 			return instance;
 		} catch (InstantiationException | IllegalAccessException e) {
-			throw new DatabaseException(e);
+			throw new RuntimeException(e);
 		}
 	}
 
