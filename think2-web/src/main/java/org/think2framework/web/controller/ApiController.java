@@ -9,7 +9,7 @@
 //import org.springframework.stereotype.Controller;
 //import org.springframework.web.bind.annotation.RequestMapping;
 //import org.think2framework.context.ModelFactory;
-//import org.think2framework.core.Model;
+//import org.think2framework.core.bean.Model;
 //import org.think2framework.core.bean.Column;
 //import org.think2framework.core.exception.MessageException;
 //import org.think2framework.core.exception.MessageFactory;

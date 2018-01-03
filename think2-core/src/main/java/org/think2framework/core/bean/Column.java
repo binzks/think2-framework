@@ -3,7 +3,7 @@ package org.think2framework.core.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.think2framework.core.Constants;
+import org.think2framework.core.persistence.Tag;
 
 /**
  * Created by zhoubin on 2017/6/12. 模型的列定义
@@ -14,7 +14,7 @@ public class Column {
 
 	private String title;// 标题
 
-	private String tag =  Constants.FIELD_TEXT; // 标签，默认是文本
+	private Tag tag = Tag.TEXT; // 标签，默认是文本
 
 	private Boolean nullable = true; // 是否可空，默认可空
 
@@ -60,14 +60,14 @@ public class Column {
 		this.title = title;
 	}
 
-	public String getTag() {
+	public Tag getTag() {
 		return tag;
 	}
 
-	public void setTag(String tag) {
+	public void setTag(Tag tag) {
 		this.tag = tag;
 		// 如果是bool类型则增加item，1-true，0-false
-		if (Constants.FIELD_BOOL.equalsIgnoreCase(tag)) {
+		if (Tag.BOOL == tag) {
 			defaultValue = "0";
 			length = 1;
 			items = new ArrayList<>();

@@ -1,6 +1,6 @@
 package org.think2framework.core.persistence;
 
-import org.think2framework.core.Constants;
+import org.think2framework.core.orm.database.Sort;
 
 import java.lang.annotation.*;
 
@@ -24,6 +24,6 @@ public @interface Order {
 	 * 
 	 * @return 排序类型
 	 */
-	String type() default Constants.ORDER_TYPE_DESC;
+	Sort sort() default Sort.ASC;
 
 }

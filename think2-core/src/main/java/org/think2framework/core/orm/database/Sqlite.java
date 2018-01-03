@@ -37,16 +37,6 @@ public class Sqlite extends AbstractDatabase {
 	}
 
 	@Override
-	public String generateJoins(List<Join> joins) {
-		return null;
-	}
-
-	@Override
-	public String generateColumns(Map<String, Column> columns) {
-		return null;
-	}
-
-	@Override
 	public SqlObject createSelect(String table, String joinSql, String fields, List<Filter> filters, List<String> group,
 			List<Order> orders, Integer page, Integer size) {
 		return null;

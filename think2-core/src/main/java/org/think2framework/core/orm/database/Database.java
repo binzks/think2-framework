@@ -1,18 +1,19 @@
 package org.think2framework.core.orm.database;
 
-import org.think2framework.core.bean.Column;
-import org.think2framework.core.bean.Filter;
-import org.think2framework.core.bean.Join;
-import org.think2framework.core.bean.Order;
-import org.think2framework.core.orm.bean.SqlObject;
-
 import java.util.List;
 import java.util.Map;
+
+import org.think2framework.core.bean.Column;
+import org.think2framework.core.bean.Filter;
+import org.think2framework.core.bean.Order;
+import org.think2framework.core.orm.bean.SqlObject;
 
 /**
  * 数据库接口
  */
 public interface Database {
+
+	String MAIN_TABLE_ALIAS = "t"; // sql语句中主表的别名
 
 	/**
 	 * 如果模型对应的表不存在则创建,已经存在则不处理,如果表有变动则返回true,如果没有变动则返回false
@@ -214,24 +215,6 @@ public interface Database {
 	 * @return 受影响的数据数量
 	 */
 	<T> int[] batchUpdate(List<T> list, String table, String pk, Map<String, Column> columns, String... keys);
-
-	/**
-	 * 根据关联设置生成关联sql语句
-	 *
-	 * @param joins
-	 *            关联
-	 * @return sql
-	 */
-	String generateJoins(List<Join> joins);
-
-	/**
-	 * 根据列设置生成默认的查询字段sql
-	 *
-	 * @param columns
-	 *            列
-	 * @return sql
-	 */
-	String generateColumns(Map<String, Column> columns);
 
 	/**
 	 * 创建一个查询，生成sql语句和值

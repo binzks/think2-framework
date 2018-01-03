@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.think2framework.core.Constants;
 import org.think2framework.core.bean.Column;
 import org.think2framework.core.bean.Filter;
-import org.think2framework.core.bean.Join;
 import org.think2framework.core.bean.Order;
 import org.think2framework.core.orm.bean.SqlObject;
+import org.think2framework.core.persistence.Tag;
 import org.think2framework.core.utils.StringUtils;
 
 /**
@@ -95,8 +94,9 @@ public class Mysql extends AbstractDatabase {
 		}
 		// 字段
 		for (Column column : columns.values()) {
-			// 忽略主键
-			if (pk.equals(column.getName())) {
+			// 忽略主键和关联表字段
+			if (pk.equals(column.getName())
+					|| (StringUtils.isNotBlank(column.getJoin()) && !column.getJoin().equals(MAIN_TABLE_ALIAS))) {
 				continue;
 			}
 			sql.append(",").append(getMysqlColumnCreateSql(column));
@@ -140,19 +140,18 @@ public class Mysql extends AbstractDatabase {
 	private String getMysqlColumnCreateSql(Column column) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("`").append(column.getName()).append("`");
-		String type = column.getTag();
-		if (Constants.FIELD_TEXT.equalsIgnoreCase(type)) {
+		Tag tag = column.getTag();
+		if (Tag.TEXT == tag) {
 			sql.append(" varchar(").append(column.getLength()).append(")");
-		} else if (Constants.FIELD_INT.equalsIgnoreCase(type) || Constants.FIELD_TIMESTAMP.equalsIgnoreCase(type)
-				|| Constants.FIELD_ITEM_INT.equalsIgnoreCase(type)) {
+		} else if (Tag.INT == tag || Tag.TIMESTAMP == tag || Tag.ITEM_INT == tag) {
 			sql.append(" int(").append(column.getLength()).append(")");
-		} else if (Constants.FIELD_BOOL.equalsIgnoreCase(type)) {
+		} else if (Tag.BOOL == tag) {
 			sql.append(" int(1)");
-		} else if (Constants.FIELD_FLOAT.equalsIgnoreCase(type)) {
+		} else if (Tag.FLOAT == tag) {
 			sql.append(" decimal(").append(column.getLength()).append(",").append(column.getScale()).append(")");
-		} else if (Constants.FIELD_JSON.equalsIgnoreCase(type)) {
+		} else if (Tag.JSON == tag) {
 			sql.append(" longtext");
-		} else if (Constants.FIELD_TEXTAREA.equals(type)) {
+		} else if (Tag.TEXTAREA == tag) {
 			sql.append(" text");
 		} else {
 			sql.append(" varchar(").append(column.getLength()).append(")");
@@ -171,54 +170,11 @@ public class Mysql extends AbstractDatabase {
 	}
 
 	@Override
-	public String generateJoins(List<Join> joins) {
-		if (null == joins || joins.size() == 0) {
-			return "";
-		}
-		StringBuilder joinSql = new StringBuilder();
-		for (Join join : joins) {
-			joinSql.append(join.getType().toUpperCase()).append(" ");
-			if (StringUtils.isNotBlank(join.getDatabase())) {
-				joinSql.append(join.getDatabase()).append(".");
-			}
-			joinSql.append(join.getTable()).append(" AS ").append(join.getName()).append(" ON ").append(join.getName())
-					.append(".").append(join.getKey()).append("=");
-			if (StringUtils.isBlank(join.getJoinName())) {
-				joinSql.append(Constants.MAIN_TABLE_ALIAS);
-			} else {
-				joinSql.append(join.getJoinName());
-			}
-			joinSql.append(".").append(join.getJoinKey());
-			if (StringUtils.isNotBlank(join.getFilter())) {
-				joinSql.append(" ").append(join.getFilter());
-			}
-		}
-		return joinSql.toString();
-	}
-
-	@Override
-	public String generateColumns(Map<String, Column> columns) {
-		if (null == columns || columns.size() == 0) {
-			return "";
-		}
-		StringBuilder sql = new StringBuilder();
-		for (Column column : columns.values()) {
-			sql.append(",")
-					.append(StringUtils.isBlank(column.getJoin()) ? Constants.MAIN_TABLE_ALIAS : column.getJoin())
-					.append(".").append(column.getName());
-			if (StringUtils.isNotBlank(column.getAlias())) {
-				sql.append(" AS ").append(column.getAlias());
-			}
-		}
-		return sql.substring(1);
-	}
-
-	@Override
 	public SqlObject createSelect(String table, String joinSql, String fields, List<Filter> filters, List<String> group,
 			List<Order> orders, Integer page, Integer size) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT ").append(fields).append(" FROM `").append(table).append("` ")
-				.append(Constants.MAIN_TABLE_ALIAS).append(" ").append(joinSql).append(" WHERE 1=1 ");
+		sql.append("SELECT ").append(fields).append(" FROM `").append(table).append("` ").append(MAIN_TABLE_ALIAS)
+				.append(" ").append(joinSql).append(" WHERE 1=1 ");
 		SqlObject sqlObject = generateFilters(filters);
 		sql.append(sqlObject.getSql());
 		if (null != group && group.size() > 0) {
@@ -234,7 +190,7 @@ public class Mysql extends AbstractDatabase {
 				for (String key : order.getKeys()) {
 					orderSql.append(",").append(key);
 				}
-				orderSql.append(" ").append(order.getType());
+				orderSql.append(" ").append(order.getSort().toString());
 			}
 			sql.append(" ORDER BY ").append(orderSql.substring(1));
 		}

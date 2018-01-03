@@ -2,6 +2,8 @@ package org.think2framework.core.bean;
 
 import java.util.List;
 
+import org.think2framework.core.orm.database.Sort;
+
 /**
  * 查询实体的排序
  */
@@ -15,14 +17,14 @@ public class Order {
 	/**
 	 * 排序规则asc、desc
 	 */
-	private String type;
+	private Sort sort;
 
 	public Order() {
 	}
 
-	public Order(List<String> keys, String type) {
+	public Order(List<String> keys, Sort sort) {
 		this.keys = keys;
-		this.type = type;
+		this.sort = sort;
 	}
 
 	public List<String> getKeys() {
@@ -33,11 +35,11 @@ public class Order {
 		this.keys = keys;
 	}
 
-	public String getType() {
-		return type;
+	public Sort getSort() {
+		return sort;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setSort(Sort sort) {
+		this.sort = sort;
 	}
 }

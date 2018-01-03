@@ -1,9 +1,5 @@
-package org.think2framework.core;
+package org.think2framework.core.bean;
 
-import org.think2framework.core.bean.Column;
-import org.think2framework.core.bean.Filter;
-import org.think2framework.core.bean.Join;
-import org.think2framework.core.bean.Order;
 import org.think2framework.core.orm.Query;
 import org.think2framework.core.orm.Writer;
 import org.think2framework.core.orm.database.Database;

@@ -254,4 +254,5 @@ public abstract class AbstractDatabase implements Database {
 		}
 		return batchUpdate(sql, batchArgs);
 	}
+
 }

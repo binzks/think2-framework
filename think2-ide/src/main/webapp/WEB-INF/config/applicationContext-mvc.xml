@@ -24,7 +24,7 @@
     <!--<property name="model" value="models/\\*.json"/>-->
     <!--</bean>-->
 
-    <bean class="org.think2framework.core.Configuration">
+    <bean class="org.think2framework.web.Configuration">
         <property name="name" value="think2ide"/>
         <property name="type" value="mysql"/>
         <property name="host" value="localhost"/>

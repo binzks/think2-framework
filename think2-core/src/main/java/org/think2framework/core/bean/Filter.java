@@ -9,20 +9,11 @@ import org.think2framework.core.orm.database.Operator;
  */
 public class Filter {
 
-	/**
-	 * 过滤关键字
-	 */
-	private String key;
+	private String key;// 过滤关键字
 
-	/**
-	 * 运算符= > <等
-	 */
-	private Operator operator;
+	private Operator operator;// 运算符= > <等
 
-	/**
-	 * 过滤值数组
-	 */
-	private List<Object> values;
+	private List<Object> values;// 过滤值数组
 
 	public Filter() {
 	}

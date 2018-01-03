@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.think2framework.core.bean.Model;
 import org.think2framework.core.orm.DatabaseFactory;
 import org.think2framework.core.orm.Query;
 import org.think2framework.core.orm.Writer;

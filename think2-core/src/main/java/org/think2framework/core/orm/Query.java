@@ -2,7 +2,6 @@ package org.think2framework.core.orm;
 
 import java.util.*;
 
-import org.think2framework.core.Constants;
 import org.think2framework.core.bean.Column;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
@@ -12,6 +11,7 @@ import org.think2framework.core.orm.bean.SqlObject;
 import org.think2framework.core.orm.database.Database;
 import org.think2framework.core.orm.database.Operator;
 import org.think2framework.core.orm.database.Redis;
+import org.think2framework.core.orm.database.Sort;
 import org.think2framework.core.utils.JsonUtils;
 import org.think2framework.core.utils.StringUtils;
 
@@ -68,8 +68,61 @@ public class Query {
 		}
 		this.redis = redis;
 		this.database = database;
-		this.joinSql = this.database.generateJoins(joins);
-		this.defaultColumnSql = this.database.generateColumns(columns);
+		if (null == joins || joins.size() == 0) {
+			this.joinSql = "";
+		} else {
+			StringBuilder joinSql = new StringBuilder();
+			for (Join join : joins) {
+				joinSql.append(join.toString()).append(" ");
+				if (StringUtils.isNotBlank(join.getDatabase())) {
+					joinSql.append(join.getDatabase()).append(".");
+				}
+				joinSql.append(join.getTable()).append(" AS ").append(join.getName()).append(" ON ")
+						.append(join.getName()).append(".").append(join.getKey()).append("=");
+				if (StringUtils.isBlank(join.getJoinName())) {
+					joinSql.append(Database.MAIN_TABLE_ALIAS);
+				} else {
+					joinSql.append(join.getJoinName());
+				}
+				joinSql.append(".").append(join.getJoinKey());
+				if (StringUtils.isNotBlank(join.getFilter())) {
+					joinSql.append(" ").append(join.getFilter());
+				}
+			}
+			this.joinSql = joinSql.toString();
+		}
+		if (null == columns && columns.size() == 0) {
+			this.defaultColumnSql = "";
+		} else {
+			StringBuilder sql = new StringBuilder();
+			for (Column column : columns.values()) {
+				sql.append(",").append(getColumnKeySql(column.getName(), true));
+			}
+			this.defaultColumnSql = sql.substring(1);
+		}
+	}
+
+	/**
+	 * 获取字段对应的查询sql,表别名.字段名 AS 别名
+	 *
+	 * @param name
+	 *            字段名称
+	 * @param alias
+	 *            是否获取别名
+	 * @return 表别名.字段名 AS 别名
+	 */
+	private String getColumnKeySql(String name, Boolean alias) {
+		Column column = columns.get(name);
+		if (null == column) {
+			throw new NonExistException("字段[" + name + "]");
+		}
+		StringBuilder sql = new StringBuilder();
+		sql.append(StringUtils.isBlank(column.getJoin()) ? Database.MAIN_TABLE_ALIAS : column.getJoin()).append(".")
+				.append(column.getName());
+		if (StringUtils.isNotBlank(column.getAlias()) && alias) {
+			sql.append(" AS ").append(column.getAlias());
+		}
+		return sql.toString();
 	}
 
 	/**
@@ -439,29 +492,6 @@ public class Query {
 	}
 
 	/**
-	 * 获取字段对应的查询sql,表别名.字段名 AS 别名
-	 *
-	 * @param name
-	 *            字段名称
-	 * @param alias
-	 *            是否获取别名
-	 * @return 表别名.字段名 AS 别名
-	 */
-	private String getColumnKeySql(String name, Boolean alias) {
-		Column column = columns.get(name);
-		if (null == column) {
-			throw new NonExistException("字段[" + name + "]");
-		}
-		StringBuilder sql = new StringBuilder();
-		sql.append(StringUtils.isBlank(column.getJoin()) ? Constants.MAIN_TABLE_ALIAS : column.getJoin()).append(".")
-				.append(column.getName());
-		if (StringUtils.isNotBlank(column.getAlias()) && alias) {
-			sql.append(" AS ").append(column.getAlias());
-		}
-		return sql.toString();
-	}
-
-	/**
 	 * 获取查询的字段sql，如果未设置则查询全部字段
 	 *
 	 * @return 查询字段sql
@@ -530,17 +560,17 @@ public class Query {
 	/**
 	 * 添加一个排序
 	 * 
-	 * @param type
+	 * @param sort
 	 *            排序类型
 	 * @param keys
 	 *            排序字段
 	 */
-	private void order(String type, String... keys) {
+	private void sort(Sort sort, String... keys) {
 		List<String> realKeys = new ArrayList<>();
 		for (String key : keys) {
 			realKeys.add(getColumnKeySql(key, false));
 		}
-		orders.add(new Order(realKeys, type));
+		orders.add(new Order(realKeys, sort));
 	}
 
 	/**
@@ -550,7 +580,7 @@ public class Query {
 	 *            order by字段名称
 	 */
 	public void desc(String... keys) {
-		order(Constants.ORDER_TYPE_DESC, keys);
+		sort(Sort.DESC, keys);
 	}
 
 	/**
@@ -560,7 +590,7 @@ public class Query {
 	 *            order by字段名称
 	 */
 	public void asc(String... keys) {
-		order(Constants.ORDER_TYPE_ASC, keys);
+		sort(Sort.ASC, keys);
 	}
 
 	/**

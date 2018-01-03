@@ -1,59 +1,37 @@
 package org.think2framework.core.bean;
 
+import org.think2framework.core.orm.database.JoinType;
+
 /**
  * 查询实体的关联条件
  */
 public class Join {
 
-	/**
-	 * 关联的名称，用于标识关联，获取关联表的表名和别名
-	 */
-	private String name;
+	private String name;// 关联的名称，用于标识关联，获取关联表的表名和别名
 
-	/**
-	 * 关联表所在数据库名称
-	 */
-	private String database;
+	private String database;// 关联表所在数据库名称
 
-	/**
-	 * 关联的表名称
-	 */
-	private String table;
+	private String table;// 关联的表名称
 
-	/**
-	 * 关联类型 left join, right join, inner join
-	 */
-	private String type = "left join";
+	private JoinType joinType = JoinType.LEFT;// 关联类型 left join, right join, inner join
 
-	/**
-	 * 关联表的字段名称
-	 */
-	private String key;
+	private String key;// 关联表的字段名称
 
-	/**
-	 * 关联的主表的关联名称，如果null或者空表示关联主表，如果不为null表示关联实体的关联表
-	 */
-	private String joinName;
+	private String joinName;// 关联的主表的关联名称，如果null或者空表示关联主表，如果不为null表示关联实体的关联表
 
-	/**
-	 * 关联的主表的字段名称
-	 */
-	private String joinKey;
+	private String joinKey;// 关联的主表的字段名称
 
-	/**
-	 * 额外的过滤条件，手动加上在join后
-	 */
-	private String filter;
+	private String filter;// 额外的过滤条件，手动加上在join后
 
 	public Join() {
 	}
 
-	public Join(String name, String database, String table, String type, String key, String joinName, String joinKey,
-			String filter) {
+	public Join(String name, String database, String table, JoinType joinType, String key, String joinName,
+			String joinKey, String filter) {
 		this.name = name;
 		this.database = database;
 		this.table = table;
-		this.type = type;
+		this.joinType = joinType;
 		this.key = key;
 		this.joinName = joinName;
 		this.joinKey = joinKey;
@@ -84,12 +62,12 @@ public class Join {
 		this.table = table;
 	}
 
-	public String getType() {
-		return type;
+	public JoinType getJoinType() {
+		return joinType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setJoinType(JoinType joinType) {
+		this.joinType = joinType;
 	}
 
 	public String getKey() {

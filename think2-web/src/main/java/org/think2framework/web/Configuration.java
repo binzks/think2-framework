@@ -1,11 +1,9 @@
-package org.think2framework.core;
+package org.think2framework.web;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.think2framework.core.exception.MessageFactory;
 import org.think2framework.core.orm.DatabaseFactory;
-import org.think2framework.core.orm.database.Type;
 import org.think2framework.core.utils.StringUtils;
 
 public class Configuration implements ApplicationContextAware {
@@ -27,11 +25,6 @@ public class Configuration implements ApplicationContextAware {
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		if (!initialized) {
-		    try {
-                Type dbType = Type.valueOf("mysql");
-            }catch (IllegalArgumentException e){
-		        System.out.println("sssss");
-            }
 			System.setProperty("jsse.enableSNIExtension", "false");
 			DatabaseFactory.append(type, name, minIdle, maxIdle, initialSize, timeout, db, host, port, username,
 					password);

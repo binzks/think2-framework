@@ -7,8 +7,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.think2framework.core.Constants;
-
 /**
  * 模型列定义
  */
@@ -20,7 +18,7 @@ public @interface Column {
 
 	String title() default "";// 标题，如果为空则取name
 
-	String tag() default Constants.FIELD_TEXT;// 字段标签，默认是文本，如果字段定义是整型或者长整型则自动修改为整型，如果是浮点则修改为浮点
+	String tag() default "";// 字段标签，默认是文本，如果字段定义是整型或者长整型则自动修改为整型，如果是浮点则修改为浮点
 
 	boolean nullable() default true;// 字段是否可空，默认可空
 
