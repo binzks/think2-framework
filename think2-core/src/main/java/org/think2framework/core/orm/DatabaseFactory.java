@@ -20,14 +20,6 @@ public class DatabaseFactory {
 	private static Map<String, Redis> redisMap = new HashMap<>(); // redis数据库map
 
 	/**
-	 * 清理数据库配置
-	 */
-	public static synchronized void clear() {
-		databases.clear();
-		logger.debug("All databases cleared successfully");
-	}
-
-	/**
 	 * 追加一个数据源
 	 *
 	 * @param type
@@ -97,7 +89,6 @@ public class DatabaseFactory {
 	public static Database getDatabase(String name) {
 		Database database = databases.get(name);
 		if (null == database) {
-			logger.error("获取不存在的数据库[{}]", name);
 			throw new NonExistException("数据库[" + name + "]");
 		}
 		return database;
@@ -113,9 +104,17 @@ public class DatabaseFactory {
 	public static Redis getRedis(String name) {
 		Redis redis = redisMap.get(name);
 		if (null == redis) {
-			logger.error("获取不存在的redis[{}]", name);
 			throw new NonExistException("Redis[" + name + "]");
 		}
 		return redis;
+	}
+
+	/**
+	 * 获取工厂已有的数据库的数量
+	 * 
+	 * @return 数据库数量
+	 */
+	public static int size() {
+		return databases.size() + redisMap.size();
 	}
 }

@@ -1,22 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.think2</groupId>
-  <artifactId>think2-framework</artifactId>
-  <version>6.0.0</version>
-  <packaging>pom</packaging>
+    <groupId>org.think2</groupId>
+    <artifactId>think2-framework</artifactId>
+    <version>6.0.0</version>
+    <packaging>pom</packaging>
 
-  <name>think2-framework</name>
-  <url>http://maven.apache.org</url>
+    <name>think2-framework</name>
+    <url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-  <modules>
-  	<module>think2-core</module>
-  	<module>think2-ide</module>
-    <module>think2-web</module>
-  </modules>
+    <modules>
+        <module>think2-core</module>
+        <module>think2-ide</module>
+        <module>think2-webmvc</module>
+    </modules>
 </project>

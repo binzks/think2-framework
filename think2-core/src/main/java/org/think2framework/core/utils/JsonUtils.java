@@ -225,6 +225,29 @@ public class JsonUtils {
 	}
 
 	/**
+	 * 读取文件并解析成map
+	 *
+	 * @param file
+	 *            文件
+	 * @return map
+	 */
+	public static Map<String, Object> readFileToMap(File file) {
+		return readFile(file, new TypeReference<Map<String, Object>>() {
+		});
+	}
+
+	/**
+	 * 读取文件并解析成map
+	 * 
+	 * @param file
+	 *            文件
+	 * @return map
+	 */
+	public static Map<String, Object> readFileToMap(String file) {
+		return readFileToMap(new File(file));
+	}
+
+	/**
 	 * 读取文件并解析成map数组
 	 *
 	 * @param file

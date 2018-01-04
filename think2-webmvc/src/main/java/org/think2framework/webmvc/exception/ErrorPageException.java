@@ -1,4 +1,4 @@
-package org.think2framework.web.exception;
+package org.think2framework.webmvc.exception;
 
 import org.think2framework.core.exception.MessageFactory;
 

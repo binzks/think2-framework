@@ -1,73 +1,25 @@
 package org.think2framework.core;
 
-import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.think2framework.core.bean.Constant;
 import org.think2framework.core.exception.NonExistException;
-import org.think2framework.core.utils.FileUtils;
 import org.think2framework.core.utils.JsonUtils;
 import org.think2framework.core.utils.StringUtils;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
  * 常量工厂
  */
 public class ConstantFactory {
 
-	public static final Integer COMMON_VALID = 0; // 通用审核通过状态值
-	public static final Integer COMMON_DISABLE = 99; // 通用停用状态值
 	private static final Logger logger = LogManager.getLogger(ConstantFactory.class);
-	private static String constantFiles; // 常量配置文件
 
 	private static Map<String, Constant> constants = new HashMap<>(); // 系统常量缓存
 
 	private static Map<String, Map<String, Object>> groups = new HashMap<>(); // 系统常量组缓存
-
-	/**
-	 * 设置常量配置文件，如果第一次设置则加载配置
-	 *
-	 * @param constants
-	 *            配置文件
-	 */
-	public static synchronized void setConstantFiles(String constants) {
-		if (StringUtils.isBlank(constantFiles)) {
-			constantFiles = constants;
-			logger.debug("Set constant files {}", constantFiles);
-			reload();
-		}
-	}
-
-	/**
-	 * 重新加载常量配置文件
-	 */
-	public static synchronized void reload() {
-		if (StringUtils.isBlank(constantFiles)) {
-			return;
-		}
-		File[] files = FileUtils.getFiles(constantFiles);
-		if (null == files) {
-			return;
-		}
-		constants.clear();
-		groups.clear();
-		logger.debug("All constants cleared successfully");
-		for (File file : files) {
-			List<Constant> constants = JsonUtils.readFile(file, new TypeReference<List<Constant>>() {
-			});
-			for (Constant constant : constants) {
-				append(constant);
-			}
-		}
-		append(new Constant("common_valid", "审核通过", null, COMMON_VALID.toString()));
-		append(new Constant("common_disable", "停用", null, COMMON_DISABLE.toString()));
-		logger.debug("Reload constant config file {}", constantFiles);
-	}
 
 	/**
 	 * 获取常量的key,如果分组不为null和空,则分组名_常量名,否则常量名
@@ -84,6 +36,15 @@ public class ConstantFactory {
 			key = group + "_" + name;
 		}
 		return key;
+	}
+
+	/**
+	 * 获取已经追加的常量数量
+	 * 
+	 * @return 常量数量
+	 */
+	public static int size() {
+		return constants.size();
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package org.think2framework.web;
+package org.think2framework.ide;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -32,7 +32,6 @@ public class Configuration implements ApplicationContextAware {
 				// ModelFactory.scanPackages(name, name, null, 0, StringUtils.split(packages,
 				// ","));
 			}
-			appendApiMessage();
 			initialized = true;
 		}
 	}
@@ -83,12 +82,6 @@ public class Configuration implements ApplicationContextAware {
 
 	public void setPackages(String packages) {
 		this.packages = packages;
-	}
-
-	private void appendApiMessage() {
-		// 默认api错误定义
-//		MessageFactory.append(new Message("01001", "接口参数?为空！"));
-//		MessageFactory.append(new Message("01002", "?数据为空！"));
 	}
 
 }

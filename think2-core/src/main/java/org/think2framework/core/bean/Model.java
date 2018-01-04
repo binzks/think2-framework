@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class Model {
 
+    private String name;
+
     private String table;
 
     private String pk;
@@ -35,6 +37,14 @@ public class Model {
     private Redis redis;
 
     private Database database;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getTable() {
         return table;

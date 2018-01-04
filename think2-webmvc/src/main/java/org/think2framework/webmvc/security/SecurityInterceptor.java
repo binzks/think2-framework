@@ -1,4 +1,4 @@
-package org.think2framework.web.security;
+package org.think2framework.webmvc.security;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,16 +1,14 @@
-package org.think2framework.web.exception;
+package org.think2framework.webmvc.exception;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.utils.HttpServletUtils;
-import org.think2framework.core.utils.StringUtils;
 
 //                            _ooOoo_
 //                           o8888888o
@@ -57,15 +55,8 @@ public class ExceptionHandler implements HandlerExceptionResolver {
 		if (MessageException.class == e.getClass()) {
 			HttpServletUtils.writeResponse(httpServletResponse, e.getMessage());
 			return new ModelAndView();
-		} else if (ErrorPageException.class == e.getClass()) {
-			return new ModelAndView("error", "msg", e.getMessage()); // 返回一个新的ModelAndView，返回为200，否则返回500
 		} else {
-			String message = "系统未知错误，请联系管理员！" + e.getMessage();
-			if (DuplicateKeyException.class == e.getClass()) {
-				message = "数据" + StringUtils.substring(message, StringUtils.indexOf(message, "Duplicate entry '") + 17,
-						StringUtils.indexOf(message, "' for key")) + "已存在！";
-			}
-			return new ModelAndView("error", "msg", message); // 返回一个新的ModelAndView，返回为200，否则返回500
+			return new ModelAndView("error", "msg", e.getMessage()); // 返回一个新的ModelAndView，返回为200，否则返回500
 		}
 	}
 

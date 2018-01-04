@@ -23,6 +23,15 @@ public class MessageFactory {
 	}
 
 	/**
+	 * 获取业务常量数量，常量总数减去预定义的系统消息数量
+	 * 
+	 * @return 业务常量数量
+	 */
+	public static int size() {
+		return messages.size() - SystemMessage.values().length;
+	}
+
+	/**
 	 * 追加一条消息定义，如果编号已经存在则不追加
 	 * 
 	 * @param code
@@ -45,9 +54,9 @@ public class MessageFactory {
 	 * @param map
 	 *            消息
 	 */
-	public static synchronized void append(Map<String, String> map) {
-		for (Map.Entry<String, String> entry : map.entrySet()) {
-			append(entry.getKey(), entry.getValue());
+	public static synchronized void append(Map<String, Object> map) {
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			append(entry.getKey(), StringUtils.toString(entry.getValue()));
 		}
 	}
 
@@ -81,7 +90,6 @@ public class MessageFactory {
 			}
 		} else {
 			message = "消息编号[" + code + "]尚未定义！";
-			logger.error("获取尚未定义的消息编号[{}]！", code);
 		}
 		return message;
 	}
@@ -98,6 +106,15 @@ public class MessageFactory {
 	public static String getJson(String code, String... values) {
 		String message = get(code, values);
 		return String.format(JSON, code, message);
+	}
+
+	/**
+	 * 获取一个不带内容的成功消息
+	 * 
+	 * @return 成功消息
+	 */
+	public static String getJson() {
+		return String.format(JSON, SystemMessage.SUCCESS.getCode(), "");
 	}
 
 	/**

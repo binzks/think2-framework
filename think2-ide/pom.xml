@@ -17,12 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>org.think2framework</groupId>
-            <artifactId>think2-core</artifactId>
-            <version>6.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.think2framework</groupId>
-            <artifactId>think2-web</artifactId>
+            <artifactId>think2-webmvc</artifactId>
             <version>6.0.0</version>
         </dependency>
         <dependency>

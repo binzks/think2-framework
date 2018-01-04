@@ -24,7 +24,7 @@
     <!--<property name="model" value="models/\\*.json"/>-->
     <!--</bean>-->
 
-    <bean class="org.think2framework.web.Configuration">
+    <bean class="org.think2framework.ide.Configuration">
         <property name="name" value="think2ide"/>
         <property name="type" value="mysql"/>
         <property name="host" value="localhost"/>
@@ -34,13 +34,13 @@
         <property name="packages" value="org.think2framework.mvc.bean,org.think2framework.ide.bean"/>
     </bean>
 
-    <!--&lt;!&ndash; Controller Service &ndash;&gt;-->
-    <!--<context:component-scan-->
-            <!--base-package="org.think2framework.web.controller,org.think2framework.api.controller"/>-->
+    <!-- Controller Service -->
+    <context:component-scan
+            base-package="org.think2framework.service.controller"/>
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
-    <bean id="exceptionHandler" class="org.think2framework.core.exception.ExceptionHandler"/>
+    <bean id="exceptionHandler" class="org.think2framework.cms.exception.ExceptionHandler"/>
 
     <mvc:interceptors>
         <mvc:interceptor>
@@ -56,7 +56,7 @@
             <mvc:exclude-mapping path="/**/*.jpg"/>
             <mvc:exclude-mapping path="/**/*.jpeg"/>
             <!--排除拦截-->
-            <bean class="org.think2framework.web.security.SecurityInterceptor"/>
+            <bean class="org.think2framework.cms.security.SecurityInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 
