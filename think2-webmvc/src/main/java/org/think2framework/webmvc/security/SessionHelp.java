@@ -1,19 +1,9 @@
-package org.think2framework.webmvc.security;
+//package org.think2framework.webmvc.security;
 //
 //import java.util.List;
 //
 //import javax.servlet.http.HttpSession;
 //
-//import org.think2framework.context.ModelFactory;
-//import org.think2framework.exception.NonsupportException;
-//import org.think2framework.exception.SimpleException;
-//import org.think2framework.mvc.bean.AdminPower;
-//import org.think2framework.mvc.bean.Module;
-//import org.think2framework.mvc.view.HtmlTag;
-//import org.think2framework.mvc.view.View;
-//import org.think2framework.mvc.view.core.ATag;
-//import org.think2framework.mvc.view.core.SimpleHtmlTag;
-//import org.think2framework.StringUtils;
 //
 //public class SessionHelp {
 //

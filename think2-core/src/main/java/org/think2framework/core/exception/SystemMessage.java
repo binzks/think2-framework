@@ -5,7 +5,7 @@ package org.think2framework.core.exception;
  */
 public enum SystemMessage {
 
-	SUCCESS("0", "系统保留的成功编号"), UNKNOWN("9", "系统保留的未知异常编号");
+	SUCCESS("0", "?"), UNKNOWN("9", "?");
 
 	private String code;
 

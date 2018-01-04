@@ -127,4 +127,15 @@ public class MessageFactory {
 	public static String getJson(Object data) {
 		return String.format(JSON, SystemMessage.SUCCESS.getCode(), data);
 	}
+
+	/**
+	 * 返回一个未知编号的错误消息
+	 * 
+	 * @param data
+	 *            消息内容
+	 * @return 消息
+	 */
+	public static String getUnknowJson(Object data) {
+		return String.format(JSON, SystemMessage.UNKNOWN.getCode(), data);
+	}
 }

@@ -8,7 +8,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.think2framework.core.exception.MessageException;
+import org.think2framework.core.exception.MessageFactory;
 import org.think2framework.core.utils.HttpServletUtils;
+import org.think2framework.core.utils.StringUtils;
+import org.think2framework.webmvc.DefaultValue;
 
 //                            _ooOoo_
 //                           o8888888o
@@ -56,7 +59,14 @@ public class ExceptionHandler implements HandlerExceptionResolver {
 			HttpServletUtils.writeResponse(httpServletResponse, e.getMessage());
 			return new ModelAndView();
 		} else {
-			return new ModelAndView("error", "msg", e.getMessage()); // 返回一个新的ModelAndView，返回为200，否则返回500
+			// 如果用户登录了返回错误页面，如果没有登录返回json
+			String id = DefaultValue.getValue(DefaultValue.LOGIN_ID, httpServletRequest.getSession());
+			if (StringUtils.isBlank(id)) {
+				HttpServletUtils.writeResponse(httpServletResponse, MessageFactory.getUnknowJson(e.getMessage()));
+				return new ModelAndView();
+			} else {
+				return new ModelAndView("error", "msg", e.getMessage()); // 返回一个新的ModelAndView，返回为200，否则返回500
+			}
 		}
 	}
 
