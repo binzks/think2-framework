@@ -1,4 +1,4 @@
-package org.think2framework.core.orm.database.mysql;
+package org.think2framework.core.orm.datasource.mysql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.think2framework.core.orm.bean.Order;
 import org.think2framework.core.exception.NonExistException;
 import org.think2framework.core.orm.ClassUtils;
 import org.think2framework.core.orm.bean.SqlObject;
-import org.think2framework.core.orm.database.*;
+import org.think2framework.core.orm.datasource.*;
 import org.think2framework.core.utils.StringUtils;
 
 /**
@@ -29,9 +29,9 @@ public class MysqlEntity extends AbstractEntity {
 	private String defaultFields; // 默认查询字段
 
 	public MysqlEntity(String table, String pk, Boolean autoIncrement, Map<String, Field> fields, List<Filter> filters,
-			List<String> groups, List<Order> orders, Database database, Redis redis, List<String> uniques,
+			List<String> groups, List<Order> orders, Datasource datasource, Redis redis, List<String> uniques,
 			List<String> indexes, List<Join> joins, String comment) {
-		super(table, pk, autoIncrement, fields, filters, groups, orders, database, redis);
+		super(table, pk, autoIncrement, fields, filters, groups, orders, datasource, redis);
 		this.uniques = uniques;
 		this.indexes = indexes;
 		this.comment = comment;
@@ -268,7 +268,7 @@ public class MysqlEntity extends AbstractEntity {
 
 	@Override
 	public int delete(String key, Object value) {
-        return database.update("DELETE FROM `" + table + "` WHERE 1=1 AND `" + key + "` =?", value);
+        return datasource.update("DELETE FROM `" + table + "` WHERE 1=1 AND `" + key + "` =?", value);
 	}
 
 }

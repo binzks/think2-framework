@@ -1,4 +1,4 @@
-package org.think2framework.core.orm.database.mysql;
+package org.think2framework.core.orm.datasource.mysql;
 
 /**
  * int字段，如果长度为null默认设置长度11

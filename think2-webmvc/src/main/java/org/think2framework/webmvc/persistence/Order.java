@@ -2,7 +2,7 @@ package org.think2framework.webmvc.persistence;
 
 import java.lang.annotation.*;
 
-import org.think2framework.core.orm.database.Sort;
+import org.think2framework.core.orm.datasource.Sort;
 
 /**
  * 查询排序定义

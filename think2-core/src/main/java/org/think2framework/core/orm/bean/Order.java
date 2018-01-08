@@ -2,7 +2,7 @@ package org.think2framework.core.orm.bean;
 
 import java.util.List;
 
-import org.think2framework.core.orm.database.Sort;
+import org.think2framework.core.orm.datasource.Sort;
 
 /**
  * 查询实体的排序

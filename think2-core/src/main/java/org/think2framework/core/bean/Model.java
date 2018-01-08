@@ -1,7 +1,7 @@
 //package org.think2framework.core.bean;
 //
-//import org.think2framework.core.orm.database.Field;
-//import org.think2framework.core.orm.database.Redis;
+//import org.think2framework.core.orm.datasource.Field;
+//import org.think2framework.core.orm.datasource.Redis;
 //
 //import java.util.List;
 //import java.util.Map;
@@ -34,7 +34,7 @@
 //
 //    private Redis redis;
 //
-//    private Database database;
+//    private Database datasource;
 //
 //    public String getName() {
 //        return name;
@@ -141,18 +141,18 @@
 //    }
 //
 //    public Database getDatabase() {
-//        return database;
+//        return datasource;
 //    }
 //
-//    public void setDatabase(Database database) {
-//        this.database = database;
+//    public void setDatabase(Database datasource) {
+//        this.datasource = datasource;
 //    }
 //
 //    public Query createQuery() {
-//        return new Query(table, pk, fields, filters, groups, orders, joins, redis, database);
+//        return new Query(table, pk, fields, filters, groups, orders, joins, redis, datasource);
 //    }
 //
 //    public Writer createWriter() {
-//        return new Writer(table, pk, autoIncrement, uniques, indexes, comment, fields, database);
+//        return new Writer(table, pk, autoIncrement, uniques, indexes, comment, fields, datasource);
 //    }
 //}

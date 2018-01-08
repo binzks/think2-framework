@@ -2,7 +2,7 @@ package org.think2framework.core.orm.bean;
 
 import java.util.List;
 
-import org.think2framework.core.orm.database.Operator;
+import org.think2framework.core.orm.datasource.Operator;
 
 /**
  * 查询实体的查询条件

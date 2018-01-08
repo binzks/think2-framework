@@ -1,7 +1,7 @@
-package org.think2framework.core.orm.database.mysql;
+package org.think2framework.core.orm.datasource.mysql;
 
-import org.think2framework.core.orm.database.AbstractField;
-import org.think2framework.core.orm.database.Entity;
+import org.think2framework.core.orm.datasource.AbstractField;
+import org.think2framework.core.orm.datasource.Entity;
 
 /**
  * 主键

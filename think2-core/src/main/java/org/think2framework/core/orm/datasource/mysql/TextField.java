@@ -1,4 +1,4 @@
-package org.think2framework.core.orm.database.mysql;
+package org.think2framework.core.orm.datasource.mysql;
 
 /**
  * text字段

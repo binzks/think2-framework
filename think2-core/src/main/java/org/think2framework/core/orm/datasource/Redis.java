@@ -1,4 +1,4 @@
-package org.think2framework.core.orm.database;
+package org.think2framework.core.orm.datasource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

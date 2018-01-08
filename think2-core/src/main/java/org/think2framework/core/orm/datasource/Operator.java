@@ -1,4 +1,4 @@
-package org.think2framework.core.orm.database;
+package org.think2framework.core.orm.datasource;
 
 /**
  * 数据库查询条件运算符

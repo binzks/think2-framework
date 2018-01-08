@@ -6,9 +6,13 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.think2framework.core.exception.NonExistException;
-import org.think2framework.core.orm.database.Database;
-import org.think2framework.core.orm.database.Redis;
-import org.think2framework.core.orm.database.Type;
+import org.think2framework.core.orm.datasource.Datasource;
+import org.think2framework.core.orm.datasource.Redis;
+import org.think2framework.core.orm.datasource.Type;
+import org.think2framework.core.orm.datasource.mysql.Mysql;
+import org.think2framework.core.orm.datasource.oracle.Oracle;
+import org.think2framework.core.orm.datasource.sqlite.Sqlite;
+import org.think2framework.core.orm.datasource.sqlserver.Sqlserver;
 
 /**
  * 数据持久化工厂
@@ -17,7 +21,7 @@ public class DatabaseFactory {
 
 	private static final Logger logger = LogManager.getLogger(DatabaseFactory.class);
 
-	private static Map<String, Database> databases = new HashMap<>();// 存储数据库的map
+	private static Map<String, Datasource> datasourceMap = new HashMap<>();// 存储数据库的map
 
 	private static Map<String, Redis> redisMap = new HashMap<>(); // redis数据库map
 
@@ -50,31 +54,29 @@ public class DatabaseFactory {
 	public static synchronized void append(String type, String name, Integer minIdle, Integer maxIdle,
 			Integer initialSize, Integer timeout, String db, String host, Integer port, String username,
 			String password) {
-		if (null != databases.get(name)) {
-			logger.warn("数据库[{}]已经存在，忽略追加！", name);
+		if (null != datasourceMap.get(name)) {
+			logger.warn("数据源[{}]已经存在，忽略追加！", name);
 		} else {
 			try {
 				Type dbType = Type.valueOf(type.toUpperCase());
 				if (Type.MYSQL == dbType) {
-					databases.put(name, new Database(minIdle, maxIdle, initialSize, timeout, username, password,
-							"com.mysql.cj.jdbc.Driver", "jdbc:mysql://" + host + (null == port ? "" : ":" + port) + "/"
-									+ db + "?characterEncoding=utf-8&useSSL=false"));
+					datasourceMap.put(name,
+							new Mysql(minIdle, maxIdle, initialSize, timeout, username, password, host, port, db));
 					logger.debug("追加mysql[{}][{}][{}]！", host, db, username);
 				} else if (Type.REDIS == dbType) {
 					redisMap.put(name, new Redis(minIdle, maxIdle, timeout, db, host, port, password));
 					logger.debug("追加redis[{}][{}]！", host, db);
 				} else if (Type.SQLSERVER == dbType) {
-					databases.put(name, new Database(minIdle, maxIdle, initialSize, timeout, username, password,
-							"com.microsoft.sqlserver.jdbc.SQLServerDriver",
-							"jdbc:sqlserver://" + host + (null == port ? "" : ":" + port) + ";databaseName=" + db));
+					datasourceMap.put(name,
+							new Sqlserver(minIdle, maxIdle, initialSize, timeout, username, password, host, port, db));
 					logger.debug("追加sqlserver[{}][{}][{}]！", host, db, username);
 				} else if (Type.ORACLE == dbType) {
-					databases.put(name, new Database(minIdle, maxIdle, initialSize, timeout, username, password,
-							"oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@" + host + ":" + db));
+					datasourceMap.put(name,
+							new Oracle(minIdle, maxIdle, initialSize, timeout, username, password, host, db));
 					logger.debug("追加oracle[{}][{}][{}]！", host, db, username);
 				} else if (Type.SQLITE == dbType) {
-					databases.put(name, new Database(minIdle, maxIdle, initialSize, timeout, username, password,
-							"org.sqlite.JDBC", "jdbc:sqlite:" + host + (null == port ? "" : ":" + port) + "/" + db));
+					datasourceMap.put(name,
+							new Sqlite(minIdle, maxIdle, initialSize, timeout, username, password, host, port, db));
 					logger.debug("追加sqlite[{}][{}][{}]！", host, db, username);
 				}
 			} catch (IllegalArgumentException e) {
@@ -90,12 +92,12 @@ public class DatabaseFactory {
 	 *            数据源名称
 	 * @return 数据库
 	 */
-	public static Database getDatabase(String name) {
-		Database database = databases.get(name);
-		if (null == database) {
-			throw new NonExistException("数据库[" + name + "]");
+	public static Datasource get(String name) {
+		Datasource datasource = datasourceMap.get(name);
+		if (null == datasource) {
+			throw new NonExistException("数据源[" + name + "]");
 		}
-		return database;
+		return datasource;
 	}
 
 	/**
@@ -119,6 +121,6 @@ public class DatabaseFactory {
 	 * @return 数据库数量
 	 */
 	public static int size() {
-		return databases.size() + redisMap.size();
+		return datasourceMap.size() + redisMap.size();
 	}
 }

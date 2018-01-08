@@ -1,6 +1,6 @@
 package org.think2framework.core.orm.bean;
 
-import org.think2framework.core.orm.database.JoinType;
+import org.think2framework.core.orm.datasource.JoinType;
 
 /**
  * 查询实体的关联条件

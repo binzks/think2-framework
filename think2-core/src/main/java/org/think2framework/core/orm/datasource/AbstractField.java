@@ -1,4 +1,4 @@
-package org.think2framework.core.orm.database;
+package org.think2framework.core.orm.datasource;
 
 import org.think2framework.core.utils.StringUtils;
 

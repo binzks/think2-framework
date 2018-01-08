@@ -1,4 +1,4 @@
-package org.think2framework.core.orm.database;
+package org.think2framework.core.orm.datasource;
 
 import java.util.*;
 
@@ -25,7 +25,7 @@ public abstract class AbstractEntity implements Entity {
 
 	protected Integer size; // 每页大小
 
-	protected Database database; // 对应数据库
+	protected Datasource datasource; // 对应数据库
 
 	protected Redis redis; // 对应redis，可能为null
 
@@ -38,7 +38,7 @@ public abstract class AbstractEntity implements Entity {
 	private String columnSql; // 自定义的查询字段
 
 	public AbstractEntity(String table, String pk, Boolean autoIncrement, Map<String, Field> fields,
-			List<Filter> filters, List<String> groups, List<Order> orders, Database database, Redis redis) {
+			List<Filter> filters, List<String> groups, List<Order> orders, Datasource datasource, Redis redis) {
 		this.table = table;
 		this.pk = pk;
 		this.autoIncrement = autoIncrement;
@@ -46,7 +46,7 @@ public abstract class AbstractEntity implements Entity {
 		this.filters = filters;
 		this.groups = groups;
 		this.orders = orders;
-		this.database = database;
+		this.datasource = datasource;
 		this.redis = redis;
 	}
 
@@ -123,12 +123,12 @@ public abstract class AbstractEntity implements Entity {
 	public boolean create() {
 		Boolean result = false;
 		try {
-			database.queryForList("SELECT 1 FROM " + table + " WHERE 1=2");
+			datasource.queryForList("SELECT 1 FROM " + table + " WHERE 1=2");
 		} catch (Exception e) {
 			if (null != e.getCause()) {
 				String msg = e.getCause().getMessage();
 				if (msg.contains("no such table") || (msg.contains("Table") && msg.contains("doesn't exist"))) {
-					database.update(createSql());
+					datasource.update(createSql());
 					result = true;
 				} else {
 					throw new RuntimeException(e);
@@ -147,7 +147,7 @@ public abstract class AbstractEntity implements Entity {
 			id = UUID.randomUUID().toString();
 		}
 		SqlObject sqlObject = createInsert(instance, id);
-		return database.insert(sqlObject.getSql(), autoIncrement, sqlObject.getValues());
+		return datasource.insert(sqlObject.getSql(), autoIncrement, sqlObject.getValues());
 	}
 
 	@Override
@@ -165,13 +165,13 @@ public abstract class AbstractEntity implements Entity {
 			}
 			batchArgs.addAll(Collections.singleton(sqlObject.getValues().toArray()));
 		}
-		return database.batchUpdate(sql, batchArgs);
+		return datasource.batchUpdate(sql, batchArgs);
 	}
 
 	@Override
 	public int update(Object instance, String... keys) {
 		SqlObject sqlObject = createUpdate(instance, keys);
-		return database.update(sqlObject.getSql(), sqlObject.getValues());
+		return datasource.update(sqlObject.getSql(), sqlObject.getValues());
 	}
 
 	@Override
@@ -185,7 +185,7 @@ public abstract class AbstractEntity implements Entity {
 			}
 			batchArgs.addAll(Collections.singleton(sqlObject.getValues().toArray()));
 		}
-		return database.batchUpdate(sql, batchArgs);
+		return datasource.batchUpdate(sql, batchArgs);
 	}
 
 	@Override
@@ -224,7 +224,7 @@ public abstract class AbstractEntity implements Entity {
 			key = f.key();
 		}
 		SqlObject sqlObject = createSelect(key);
-		Integer result = database.queryForObject(sqlObject.getSql(), sqlObject.getValues().toArray(), Integer.class);
+		Integer result = datasource.queryForObject(sqlObject.getSql(), sqlObject.getValues().toArray(), Integer.class);
 		if (null == result) {
 			result = 0;
 		}
@@ -234,7 +234,7 @@ public abstract class AbstractEntity implements Entity {
 	@Override
 	public Map<String, Object> queryForMap() {
 		SqlObject sqlObject = createSelect(getSelectFields());
-		return database.queryForMap(sqlObject.getSql(), sqlObject.getValues());
+		return datasource.queryForMap(sqlObject.getSql(), sqlObject.getValues());
 	}
 
 	@Override
@@ -255,7 +255,7 @@ public abstract class AbstractEntity implements Entity {
 	@Override
 	public <T> T queryForObject(Class<T> requiredType) {
 		SqlObject sqlObject = createSelect(getSelectFields());
-		return database.queryForObject(sqlObject.getSql(), sqlObject.getValues().toArray(), requiredType);
+		return datasource.queryForObject(sqlObject.getSql(), sqlObject.getValues().toArray(), requiredType);
 	}
 
 	@Override
@@ -276,7 +276,7 @@ public abstract class AbstractEntity implements Entity {
 	@Override
 	public <T> List<T> queryForList(Class<T> elementType) {
 		SqlObject sqlObject = createSelect(getSelectFields());
-		return database.queryForList(sqlObject.getSql(), sqlObject.getValues().toArray(), elementType);
+		return datasource.queryForList(sqlObject.getSql(), sqlObject.getValues().toArray(), elementType);
 	}
 
 	@Override
@@ -297,7 +297,7 @@ public abstract class AbstractEntity implements Entity {
 	@Override
 	public List<Map<String, Object>> queryForList() {
 		SqlObject sqlObject = createSelect(getSelectFields());
-		return database.queryForList(sqlObject.getSql(), sqlObject.getValues());
+		return datasource.queryForList(sqlObject.getSql(), sqlObject.getValues());
 	}
 
 	@Override

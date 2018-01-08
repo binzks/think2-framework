@@ -1,4 +1,4 @@
-package org.think2framework.core.orm.database;
+package org.think2framework.core.orm.datasource;
 
 import java.util.List;
 import java.util.Map;
