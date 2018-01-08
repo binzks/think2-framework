@@ -1,4 +1,4 @@
-package org.think2framework.core.persistence;
+package org.think2framework.webmvc.persistence;
 
 import java.lang.annotation.*;
 

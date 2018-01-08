@@ -5,9 +5,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.think2framework.core.bean.Constant;
 import org.think2framework.core.exception.NonExistException;
-import org.think2framework.core.utils.JsonUtils;
 import org.think2framework.core.utils.StringUtils;
 
 /**
@@ -17,7 +15,7 @@ public class ConstantFactory {
 
 	private static final Logger logger = LogManager.getLogger(ConstantFactory.class);
 
-	private static Map<String, Constant> constants = new HashMap<>(); // 系统常量缓存
+	private static Map<String, Object> constants = new HashMap<>(); // 系统常量缓存
 
 	private static Map<String, Map<String, Object>> groups = new HashMap<>(); // 系统常量组缓存
 
@@ -30,7 +28,7 @@ public class ConstantFactory {
 	 *            常量名
 	 * @return 常量key
 	 */
-	private static String getConstantKey(String group, String name) {
+	private static String getKey(String group, String name) {
 		String key = name;
 		if (StringUtils.isNotBlank(group)) {
 			key = group + "_" + name;
@@ -49,20 +47,26 @@ public class ConstantFactory {
 
 	/**
 	 * 追加常量
-	 * 
-	 * @param constant
-	 *            常量
 	 */
-	public static synchronized void append(Constant constant) {
-		String group = constant.getGroup();
-		String key = getConstantKey(group, constant.getName());
+
+	/**
+	 * 追加一个常量，如果常量已经存在则忽略
+	 * 
+	 * @param group
+	 *            分组名称
+	 * @param name
+	 *            常量名称
+	 * @param value
+	 *            常量值
+	 */
+	public static synchronized void append(String group, String name, String value) {
+		String key = getKey(group, name);
 		if (null != constants.get(key)) {
 			logger.warn("常量[{}]已经存在，忽略追加！", key);
 		} else {
-			constants.put(key, constant);
+			constants.put(key, value);
 			// 如果常量存在分组名称,则将常量添加到分组
 			if (StringUtils.isNotBlank(group)) {
-				String value = constant.getValue();
 				// 如果常量分组还不存在则创建
 				Map<String, Object> map = groups.get(group);
 				if (null == map) {
@@ -72,12 +76,12 @@ public class ConstantFactory {
 				if (null != map.get(value)) {
 					logger.warn("常量分组[{}]值[{}]已经存在，忽略追加！", group, value);
 				} else {
-					map.put(value, constant.getDisplay());
+					map.put(value, name);
 					groups.put(group, map);
 				}
 
 			}
-			logger.debug("追加常量" + JsonUtils.toString(constant));
+			logger.debug("追加常量[{}][{}][{}]", group, name, value);
 		}
 	}
 
@@ -90,13 +94,13 @@ public class ConstantFactory {
 	 *            常量名称
 	 * @return 常量值
 	 */
-	public static String getConstant(String group, String name) {
-		String key = getConstantKey(group, name);
-		Constant constant = constants.get(key);
-		if (null == constant) {
-			throw new NonExistException(Constant.class.getName() + " " + key);
+	public static String get(String group, String name) {
+		String key = getKey(group, name);
+		Object value = constants.get(key);
+		if (null == value) {
+			throw new NonExistException("常量[" + key + "]");
 		}
-		return constant.getValue();
+		return value.toString();
 	}
 
 	/**
@@ -107,20 +111,7 @@ public class ConstantFactory {
 	 * @return 常量值
 	 */
 	public static String get(String name) {
-		return getConstant(null, name);
-	}
-
-	/**
-	 * 根据分组名和常量名获取一个常量
-	 *
-	 * @param group
-	 *            分组名称
-	 * @param name
-	 *            常量名称
-	 * @return 常量值
-	 */
-	public static String get(String group, String name) {
-		return getConstant(group, name);
+		return get(null, name);
 	}
 
 	/**
@@ -130,55 +121,12 @@ public class ConstantFactory {
 	 *            分组名称
 	 * @return 分组map
 	 */
-	public static Map<String, Object> getConstantGroup(String name) {
+	public static Map<String, Object> getGroup(String name) {
 		Map<String, Object> map = groups.get(name);
 		if (null == map) {
 			throw new NonExistException("常量分组[" + name + "]");
 		}
 		return map;
-	}
-
-	/**
-	 * 根据常量分组名称和常量值获取常量的显示名称
-	 *
-	 * @param group
-	 *            分组名称
-	 * @param value
-	 *            常量值
-	 * @return 显示名称
-	 */
-	public static String getConstantGroupDisplay(String group, Object value) {
-		Map<String, Object> map = getConstantGroup(group);
-		String v = StringUtils.defaultString(String.valueOf(value));
-		Object display = map.get(v);
-		if (null == display) {
-			throw new NonExistException(Constant.class.getName() + " " + group + "_" + value + " display");
-		}
-		return display.toString();
-	}
-
-	/**
-	 * 根据分组名获取一个常量分组
-	 *
-	 * @param name
-	 *            分组名
-	 * @return 分组map
-	 */
-	public static Map<String, Object> getGroup(String name) {
-		return getConstantGroup(name);
-	}
-
-	/**
-	 * 根据常量分组名称和常量值获取常量的显示名称
-	 *
-	 * @param group
-	 *            分组名称
-	 * @param value
-	 *            常量值
-	 * @return 显示名称
-	 */
-	public static String getGroupDisplay(String group, Object value) {
-		return getConstantGroupDisplay(group, value);
 	}
 
 	/**
@@ -207,7 +155,7 @@ public class ConstantFactory {
 	 */
 	public static boolean equals(String group, String name, Object value) {
 		Boolean result = false;
-		Object v = getConstant(group, name);
+		Object v = get(group, name);
 		if (Object.class.getClass() == String.class.getClass()) {
 			if (value.toString().equals(v.toString())) {
 				result = true;

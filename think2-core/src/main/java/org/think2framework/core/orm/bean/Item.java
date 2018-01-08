@@ -1,4 +1,4 @@
-package org.think2framework.core.bean;
+package org.think2framework.core.orm.bean;
 
 /**
  * Created by zhoubin on 2017/6/12. cell的选择定义，支持固定的几个下拉项或者从数据源选择数据

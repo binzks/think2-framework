@@ -1,4 +1,4 @@
-package org.think2framework.core.persistence;
+package org.think2framework.webmvc.persistence;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,16 +6,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 多查询过滤定义
+ * 多关联注解
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Filters {
+public @interface JoinTables {
 
 	/**
-	 * 查询过滤
+	 * 查询关联
 	 * 
-	 * @return 查询过滤
+	 * @return 查询关联
 	 */
-	Filter[] value();
+	JoinTable[] value();
 }

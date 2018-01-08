@@ -1,10 +1,12 @@
-//package org.think2framework.core.bean;
-//
-//import org.think2framework.core.orm.database.Field;
-//import org.think2framework.core.orm.database.Redis;
+//package org.think2framework.webmvc.bean;
 //
 //import java.util.List;
 //import java.util.Map;
+//
+//import org.think2framework.core.bean.Filter;
+//import org.think2framework.core.bean.Join;
+//import org.think2framework.core.bean.Order;
+//import org.think2framework.core.orm.database.Redis;
 //
 //public class Model {
 //
@@ -22,7 +24,7 @@
 //
 //    private String comment;
 //
-//    private Map<String, Field> fields;
+//    private Map<String, Column> columns;
 //
 //    private List<Join> joins;
 //
@@ -92,12 +94,12 @@
 //        this.comment = comment;
 //    }
 //
-//    public Map<String, Field> getFields() {
-//        return fields;
+//    public Map<String, Column> getColumns() {
+//        return columns;
 //    }
 //
-//    public void setFields(Map<String, Field> fields) {
-//        this.fields = fields;
+//    public void setColumns(Map<String, Column> columns) {
+//        this.columns = columns;
 //    }
 //
 //    public List<Join> getJoins() {
@@ -149,10 +151,10 @@
 //    }
 //
 //    public Query createQuery() {
-//        return new Query(table, pk, fields, filters, groups, orders, joins, redis, database);
+//        return new Query(table, pk, columns, filters, groups, orders, joins, redis, database);
 //    }
 //
 //    public Writer createWriter() {
-//        return new Writer(table, pk, autoIncrement, uniques, indexes, comment, fields, database);
+//        return new Writer(table, pk, autoIncrement, uniques, indexes, comment, columns, database);
 //    }
 //}

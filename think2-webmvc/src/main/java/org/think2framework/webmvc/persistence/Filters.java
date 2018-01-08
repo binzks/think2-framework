@@ -1,4 +1,4 @@
-package org.think2framework.core.persistence;
+package org.think2framework.webmvc.persistence;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,16 +6,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 多查询排序定义
+ * 多查询过滤定义
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Orders {
+public @interface Filters {
 
 	/**
-	 * 排序
+	 * 查询过滤
 	 * 
-	 * @return 排序
+	 * @return 查询过滤
 	 */
-	Order[] value();
+	Filter[] value();
 }

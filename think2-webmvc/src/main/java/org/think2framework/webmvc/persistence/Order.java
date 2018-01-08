@@ -1,8 +1,8 @@
-package org.think2framework.core.persistence;
-
-import org.think2framework.core.orm.database.Sort;
+package org.think2framework.webmvc.persistence;
 
 import java.lang.annotation.*;
+
+import org.think2framework.core.orm.database.Sort;
 
 /**
  * 查询排序定义

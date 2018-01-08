@@ -6,7 +6,9 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.think2framework.core.exception.NonExistException;
-import org.think2framework.core.orm.database.*;
+import org.think2framework.core.orm.database.Database;
+import org.think2framework.core.orm.database.Redis;
+import org.think2framework.core.orm.database.Type;
 
 /**
  * 数据持久化工厂
@@ -54,23 +56,25 @@ public class DatabaseFactory {
 			try {
 				Type dbType = Type.valueOf(type.toUpperCase());
 				if (Type.MYSQL == dbType) {
-					databases.put(name, new Mysql(minIdle, maxIdle, initialSize, timeout,
-							host + (null == port ? "" : ":" + port), db, username, password));
+					databases.put(name, new Database(minIdle, maxIdle, initialSize, timeout, username, password,
+							"com.mysql.cj.jdbc.Driver", "jdbc:mysql://" + host + (null == port ? "" : ":" + port) + "/"
+									+ db + "?characterEncoding=utf-8&useSSL=false"));
 					logger.debug("追加mysql[{}][{}][{}]！", host, db, username);
 				} else if (Type.REDIS == dbType) {
 					redisMap.put(name, new Redis(minIdle, maxIdle, timeout, db, host, port, password));
 					logger.debug("追加redis[{}][{}]！", host, db);
 				} else if (Type.SQLSERVER == dbType) {
-					databases.put(name, new Sqlserver(minIdle, maxIdle, initialSize, timeout,
-							host + (null == port ? "" : ":" + port), db, username, password));
+					databases.put(name, new Database(minIdle, maxIdle, initialSize, timeout, username, password,
+							"com.microsoft.sqlserver.jdbc.SQLServerDriver",
+							"jdbc:sqlserver://" + host + (null == port ? "" : ":" + port) + ";databaseName=" + db));
 					logger.debug("追加sqlserver[{}][{}][{}]！", host, db, username);
 				} else if (Type.ORACLE == dbType) {
-					databases.put(name, new Oracle(minIdle, maxIdle, initialSize, timeout,
-							host + (null == port ? "" : ":" + port), db, username, password));
+					databases.put(name, new Database(minIdle, maxIdle, initialSize, timeout, username, password,
+							"oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@" + host + ":" + db));
 					logger.debug("追加oracle[{}][{}][{}]！", host, db, username);
 				} else if (Type.SQLITE == dbType) {
-					databases.put(name, new Sqlite(minIdle, maxIdle, initialSize, timeout,
-							host + (null == port ? "" : ":" + port), db, username, password));
+					databases.put(name, new Database(minIdle, maxIdle, initialSize, timeout, username, password,
+							"org.sqlite.JDBC", "jdbc:sqlite:" + host + (null == port ? "" : ":" + port) + "/" + db));
 					logger.debug("追加sqlite[{}][{}][{}]！", host, db, username);
 				}
 			} catch (IllegalArgumentException e) {

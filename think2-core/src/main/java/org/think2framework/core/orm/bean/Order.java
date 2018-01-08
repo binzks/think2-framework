@@ -1,4 +1,4 @@
-package org.think2framework.core.bean;
+package org.think2framework.core.orm.bean;
 
 import java.util.List;
 

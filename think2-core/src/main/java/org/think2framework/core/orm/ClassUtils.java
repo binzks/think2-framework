@@ -9,7 +9,6 @@ import java.util.*;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 import org.think2framework.core.exception.NonExistException;
 import org.think2framework.core.orm.bean.SqlObject;
-import org.think2framework.core.persistence.Column;
 import org.think2framework.core.utils.JsonUtils;
 import org.think2framework.core.utils.StringUtils;
 
@@ -37,15 +36,15 @@ public class ClassUtils {
 	 */
 	private static String getFieldKey(Field field) {
 		String key = field.getName();
-		Column column = field.getAnnotation(Column.class);
-		if (null != column) {
-			if (StringUtils.isNotBlank(column.name())) {
-				key = column.name();
-			}
-			if (StringUtils.isNotBlank(column.alias())) {
-				key = column.alias();
-			}
-		}
+//		Column column = field.getAnnotation(Column.class);
+//		if (null != column) {
+//			if (StringUtils.isNotBlank(column.name())) {
+//				key = column.name();
+//			}
+//			if (StringUtils.isNotBlank(column.alias())) {
+//				key = column.alias();
+//			}
+//		}
 		return key;
 	}
 
@@ -218,105 +217,4 @@ public class ClassUtils {
 		}
 	}
 
-	/**
-	 * 创建一个新增，返回新增sql语句和值
-	 * 
-	 * @param instance
-	 *            待新增的数据对象
-	 * @param table
-	 *            表名
-	 * @param pk
-	 *            主键名称
-	 * @param id
-	 *            id值，如果是自增长则为null
-	 * @param columns
-	 *            列
-	 * @param keyBegin
-	 *            关键字前缀
-	 * @param keyEnd
-	 *            关键字后缀
-	 * @return sql和值
-	 */
-	public static SqlObject createInsert(Object instance, String table, String pk, String id,
-			Map<String, org.think2framework.core.bean.Column> columns, String keyBegin, String keyEnd) {
-		StringBuffer fieldSql = new StringBuffer();
-		StringBuffer valueSql = new StringBuffer();
-		List<Object> values = new ArrayList<>();
-		if (null != id) {
-			fieldSql.append(",").append(keyBegin).append(pk).append(keyEnd);
-			valueSql.append(",?");
-			values.add(id);
-		}
-		for (org.think2framework.core.bean.Column column : columns.values()) {
-			// 如果字段不是主键,则添加
-			String key = column.getName();
-			if (!key.equals(pk)) {
-				Object value = getFieldValue(instance, key);
-				// 不新增null值
-				if (null == value) {
-					continue;
-				}
-				fieldSql.append(",").append(keyBegin).append(key).append(keyEnd);
-				valueSql.append(",?");
-				values.add(value);
-			}
-		}
-		StringBuffer sql = new StringBuffer();
-		sql.append("INSERT INTO ").append(keyBegin).append(table).append(keyEnd).append("(")
-				.append(fieldSql.toString().substring(1)).append(") VALUES (").append(valueSql.toString().substring(1))
-				.append(")");
-		return new SqlObject(sql.toString(), values);
-	}
-
-	/**
-	 * 创建一个修改sql和值
-	 * 
-	 * @param instance
-	 *            待修改的字段
-	 * @param table
-	 *            表名
-	 * @param pk
-	 *            主键名称
-	 * @param keyBegin
-	 *            关键字前缀
-	 * @param keyEnd
-	 *            关键字后缀
-	 * @param columns
-	 *            列
-	 * @param keys
-	 *            修改关键字
-	 * @return sql和值
-	 */
-	public static SqlObject createUpdate(Object instance, String table, String pk, String keyBegin, String keyEnd,
-			Map<String, org.think2framework.core.bean.Column> columns, String... keys) {
-		StringBuffer fieldSql = new StringBuffer();
-		StringBuilder keySql = new StringBuilder();
-		List<Object> values = new ArrayList<>();
-		for (org.think2framework.core.bean.Column column : columns.values()) {
-			String key = column.getName();
-			// 如果字段不是主键,则修改
-			if (!key.equals(pk)) {
-				Object value = ClassUtils.getFieldValue(instance, key);
-				// 不修改null的字段
-				if (null == value) {
-					continue;
-				}
-				fieldSql.append(",").append(keyBegin).append(key).append(keyEnd).append("=?");
-				values.add(value);
-			}
-		}
-		if (null == keys || keys.length == 0) {
-			keySql.append(" AND ").append(keyBegin).append(pk).append(keyEnd).append("=?");
-			values.add(ClassUtils.getFieldValue(instance, pk));
-		} else {
-			for (String key : keys) {
-				keySql.append(" AND ").append(keyBegin).append(key).append(keyEnd).append("=?");
-				values.add(ClassUtils.getFieldValue(instance, key));
-			}
-		}
-		StringBuffer sql = new StringBuffer();
-		sql.append("UPDATE ").append(keyBegin).append(table).append(keyEnd).append(" SET ")
-				.append(fieldSql.toString().substring(1)).append(" WHERE 1=1").append(keySql.toString());
-		return new SqlObject(sql.toString(), values);
-	}
 }

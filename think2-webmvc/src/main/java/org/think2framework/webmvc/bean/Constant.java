@@ -1,4 +1,4 @@
-package org.think2framework.core.bean;
+package org.think2framework.webmvc.bean;
 
 /**
  * Created by zhoubin on 16/2/16. 常量bean
