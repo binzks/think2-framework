@@ -7,6 +7,24 @@ public class MessageException extends RuntimeException {
 
 	private String message; // 异常消息
 
+	/**
+	 * 抛出一个未知的异常
+	 * 
+	 * @param cause
+	 *            异常
+	 */
+	public MessageException(Throwable cause) {
+		this.message = MessageFactory.getJson(SystemMessage.UNKNOWN.getCode(), cause.getMessage());
+	}
+
+	/**
+	 * 抛出一个自定义异常
+	 * 
+	 * @param code
+	 *            异常编号
+	 * @param values
+	 *            异常参数值
+	 */
 	public MessageException(String code, String... values) {
 		this.message = MessageFactory.getJson(code, values);
 	}

@@ -7,7 +7,7 @@ import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
 import org.think2framework.core.bean.Order;
 import org.think2framework.core.datasource.AbstractDatasource;
-import org.think2framework.core.orm.Entity;
+import org.think2framework.core.datasource.Entity;
 import org.think2framework.core.datasource.Field;
 import org.think2framework.core.datasource.Redis;
 

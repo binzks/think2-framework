@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>org.think2framework</groupId>
-            <artifactId>think2-webmvc</artifactId>
+            <artifactId>think2-core</artifactId>
             <version>6.0.0</version>
         </dependency>
         <dependency>
@@ -55,18 +55,5 @@
     </dependencies>
     <build>
         <finalName>think2-ide</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.1</version>
-                <configuration>
-                    <port>8080</port>
-                    <path>/</path>
-                    <uriEncoding>UTF-8</uriEncoding>
-                    <server>tomcat7</server>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>

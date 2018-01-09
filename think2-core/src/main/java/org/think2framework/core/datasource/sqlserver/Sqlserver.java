@@ -3,7 +3,7 @@ package org.think2framework.core.datasource.sqlserver;
 import java.util.List;
 import java.util.Map;
 
-import org.think2framework.core.orm.Entity;
+import org.think2framework.core.datasource.Entity;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
 import org.think2framework.core.bean.Order;

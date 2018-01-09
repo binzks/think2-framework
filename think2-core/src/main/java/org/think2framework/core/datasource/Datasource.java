@@ -6,7 +6,6 @@ import java.util.Map;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
 import org.think2framework.core.bean.Order;
-import org.think2framework.core.orm.Entity;
 
 /**
  * 数据源接口

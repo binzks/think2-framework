@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.think2framework.core.ClassUtils;
-import org.think2framework.core.exception.NonExistException;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
 import org.think2framework.core.bean.Order;
@@ -14,6 +13,8 @@ import org.think2framework.core.bean.SqlObject;
 import org.think2framework.core.datasource.AbstractEntity;
 import org.think2framework.core.datasource.Field;
 import org.think2framework.core.datasource.Redis;
+import org.think2framework.core.exception.MessageException;
+import org.think2framework.core.exception.SystemMessage;
 import org.think2framework.core.persistence.Operator;
 import org.think2framework.core.utils.StringUtils;
 
@@ -157,7 +158,7 @@ public class MysqlEntity extends AbstractEntity {
 		}
 		if (null == keys || keys.length == 0) {
 			if (null == pk) {
-				throw new NonExistException("主键字段");
+				throw new MessageException(SystemMessage.NON_EXIST.getCode(), "主键字段");
 			}
 			keySql.append(" AND `").append(pk).append("`=?");
 			values.add(ClassUtils.getFieldValue(instance, pk));

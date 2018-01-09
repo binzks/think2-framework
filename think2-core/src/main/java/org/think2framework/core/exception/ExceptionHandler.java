@@ -7,8 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
+import org.think2framework.core.security.SessionFactory;
 import org.think2framework.core.utils.HttpServletUtils;
-import org.think2framework.core.utils.StringUtils;
 
 //                            _ooOoo_
 //                           o8888888o
@@ -52,19 +52,15 @@ public class ExceptionHandler implements HandlerExceptionResolver {
 	public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			Object o, Exception e) {
 		logger.error(e);
-		if (MessageException.class == e.getClass()) {
-			HttpServletUtils.writeResponse(httpServletResponse, e.getMessage());
-			return new ModelAndView();
+		if (SessionFactory.isLogin(httpServletRequest)) {
+			return new ModelAndView("error", "msg", e.getMessage()); // 返回一个新的ModelAndView，返回为200，否则返回500
 		} else {
-			// 如果用户登录了返回错误页面，如果没有登录返回json
-//			String id = DefaultValue.getValue(DefaultValue.LOGIN_ID, httpServletRequest.getSession());
-			String id = "";
-			if (StringUtils.isBlank(id)) {
-				HttpServletUtils.writeResponse(httpServletResponse, MessageFactory.getUnKnowJson(e.getMessage()));
-				return new ModelAndView();
-			} else {
-				return new ModelAndView("error", "msg", e.getMessage()); // 返回一个新的ModelAndView，返回为200，否则返回500
+			String message = e.getMessage();
+			if (MessageException.class != e.getClass()) {
+				message = MessageFactory.getJson(SystemMessage.UNKNOWN.getCode(), message);
 			}
+			HttpServletUtils.writeResponse(httpServletResponse, message);
+			return new ModelAndView();
 		}
 	}
 

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 import org.springframework.util.LinkedCaseInsensitiveMap;
-import org.think2framework.core.exception.NonExistException;
+import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.utils.JsonUtils;
 import org.think2framework.core.utils.StringUtils;
 
@@ -35,15 +35,15 @@ public class ClassUtils {
 	 */
 	private static String getFieldKey(Field field) {
 		String key = field.getName();
-//		Column column = field.getAnnotation(Column.class);
-//		if (null != column) {
-//			if (StringUtils.isNotBlank(column.name())) {
-//				key = column.name();
-//			}
-//			if (StringUtils.isNotBlank(column.alias())) {
-//				key = column.alias();
-//			}
-//		}
+		// Column column = field.getAnnotation(Column.class);
+		// if (null != column) {
+		// if (StringUtils.isNotBlank(column.name())) {
+		// key = column.name();
+		// }
+		// if (StringUtils.isNotBlank(column.alias())) {
+		// key = column.alias();
+		// }
+		// }
 		return key;
 	}
 
@@ -206,7 +206,7 @@ public class ClassUtils {
 					if (e.getSQLState().equals("S1000")) { // 表示ResultSet是空的,没有数据
 						return null;
 					} else if (!e.getSQLState().equals("S0022")) { // S0022表示字段name不存在
-						throw new NonExistException(e);
+						throw new MessageException(e);
 					}
 				}
 			}

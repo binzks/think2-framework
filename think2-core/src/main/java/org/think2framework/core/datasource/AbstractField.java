@@ -1,6 +1,5 @@
 package org.think2framework.core.datasource;
 
-import org.think2framework.core.orm.Entity;
 import org.think2framework.core.utils.StringUtils;
 
 /**

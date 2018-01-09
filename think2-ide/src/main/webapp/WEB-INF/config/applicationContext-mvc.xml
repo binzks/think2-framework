@@ -36,11 +36,11 @@
 
     <!-- Controller Service -->
     <context:component-scan
-            base-package="org.think2framework.webmvc.controller"/>
+            base-package="org.think2framework.core.controller"/>
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
-    <bean id="exceptionHandler" class="org.think2framework.webmvc.exception.ExceptionHandler"/>
+    <bean id="exceptionHandler" class="org.think2framework.core.exception.ExceptionHandler"/>
 
     <mvc:interceptors>
         <mvc:interceptor>
@@ -56,7 +56,7 @@
             <mvc:exclude-mapping path="/**/*.jpg"/>
             <mvc:exclude-mapping path="/**/*.jpeg"/>
             <!--排除拦截-->
-            <bean class="org.think2framework.webmvc.security.SecurityInterceptor"/>
+            <bean class="org.think2framework.core.security.SecurityInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

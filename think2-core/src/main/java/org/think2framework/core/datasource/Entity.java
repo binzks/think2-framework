@@ -1,4 +1,4 @@
-package org.think2framework.core.orm;
+package org.think2framework.core.datasource;
 
 import org.think2framework.core.persistence.Operator;
 

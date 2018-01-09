@@ -5,7 +5,7 @@ package org.think2framework.core.exception;
  */
 public enum SystemMessage {
 
-	SUCCESS("0", "?"), UNKNOWN("9", "?");
+	SUCCESS("0", "?"), UNKNOWN("9", "?"), NON_EXIST("1", "[?]不存在！");
 
 	private String code;
 

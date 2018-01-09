@@ -11,11 +11,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.think2framework.core.ClassUtils;
-import org.think2framework.core.exception.NonExistException;
-import org.think2framework.core.orm.Entity;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Order;
 import org.think2framework.core.bean.SqlObject;
+import org.think2framework.core.exception.MessageException;
+import org.think2framework.core.exception.SystemMessage;
 import org.think2framework.core.persistence.Operator;
 import org.think2framework.core.persistence.Sort;
 import org.think2framework.core.utils.StringUtils;
@@ -74,7 +74,7 @@ public abstract class AbstractEntity implements Entity {
 	private Field getField(String name) {
 		Field field = fields.get(name);
 		if (null == field) {
-			throw new NonExistException("字段[" + name + "]");
+			throw new MessageException(SystemMessage.NON_EXIST.getCode(), "字段[" + name + "]");
 		}
 		return field;
 	}
