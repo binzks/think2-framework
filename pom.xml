@@ -17,6 +17,5 @@
     <modules>
         <module>think2-core</module>
         <module>think2-ide</module>
-        <module>think2-webmvc</module>
     </modules>
 </project>

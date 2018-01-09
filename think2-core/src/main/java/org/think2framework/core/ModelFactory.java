@@ -1,4 +1,4 @@
-//package org.think2framework.core;
+package org.think2framework.core;//package org.think2framework.core;
 //
 //import java.util.HashMap;
 //import java.util.List;

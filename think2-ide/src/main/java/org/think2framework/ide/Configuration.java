@@ -3,7 +3,6 @@ package org.think2framework.ide;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.think2framework.core.orm.DatabaseFactory;
 import org.think2framework.core.utils.StringUtils;
 
 public class Configuration implements ApplicationContextAware {
@@ -26,8 +25,8 @@ public class Configuration implements ApplicationContextAware {
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		if (!initialized) {
 			System.setProperty("jsse.enableSNIExtension", "false");
-			DatabaseFactory.append(type, name, minIdle, maxIdle, initialSize, timeout, db, host, port, username,
-					password);
+//			DatabaseFactory.append(type, name, minIdle, maxIdle, initialSize, timeout, db, host, port, username,
+//					password);
 			if (StringUtils.isNotBlank(packages)) {
 				// ModelFactory.scanPackages(name, name, null, 0, StringUtils.split(packages,
 				// ","));

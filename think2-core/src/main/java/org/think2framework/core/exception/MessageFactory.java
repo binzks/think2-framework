@@ -135,7 +135,7 @@ public class MessageFactory {
 	 *            消息内容
 	 * @return 消息
 	 */
-	public static String getUnknowJson(Object data) {
+	public static String getUnKnowJson(Object data) {
 		return String.format(JSON, SystemMessage.UNKNOWN.getCode(), data);
 	}
 }
