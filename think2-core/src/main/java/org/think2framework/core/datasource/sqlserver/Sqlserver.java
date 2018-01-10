@@ -26,44 +26,21 @@ public class Sqlserver extends AbstractDatasource {
 	}
 
 	@Override
-	public Field createStringField(String name, Boolean nullable, String join, String alias, String defaultValue, Integer length, String comment) {
+	public Field createField(FieldType fieldType, String name, Boolean nullable, String join, String alias,
+			String defaultValue, Integer length, Integer scale, String comment) {
 		return null;
 	}
 
 	@Override
-	public Field createIntegerField(String name, Boolean nullable, String join, String alias, String defaultValue, Integer length, String comment) {
+	public Query createQuery(String table, String pk, Map<String, Field> fields, List<Filter> filters,
+			List<String> groups, List<Order> orders, List<Join> joins, Redis redis) {
 		return null;
 	}
 
 	@Override
-	public Field createBooleanField(String name, Boolean nullable, String join, String alias, String defaultValue, String comment) {
+	public Writer createWriter(String table, String pk, Boolean autoIncrement, Map<String, Field> fields,
+			List<String> uniques, List<String> indexes, String comment) {
 		return null;
 	}
-
-	@Override
-	public Field createFloatField(String name, Boolean nullable, String join, String alias, String defaultValue, Integer length, Integer scale, String comment) {
-		return null;
-	}
-
-	@Override
-	public Field createTextField(String name, Boolean nullable, String join, String alias, String defaultValue, String comment) {
-		return null;
-	}
-
-	@Override
-	public Field createJsonField(String name, Boolean nullable, String join, String alias, String defaultValue, String comment) {
-		return null;
-	}
-
-	@Override
-	public Query createQuery(String table, String pk, Map<String, Field> fields, Redis redis, List<Filter> filters, List<String> groups, List<Order> orders, List<Join> joins) {
-		return null;
-	}
-
-	@Override
-	public Writer createWriter(String table, String pk, Boolean autoIncrement, Map<String, Field> fields, List<String> uniques, List<String> indexes, String comment) {
-		return null;
-	}
-
 
 }

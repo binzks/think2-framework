@@ -1,6 +1,6 @@
-package org.think2framework.core.bean;
+package org.think2framework.ide.bean;
 
-import org.think2framework.core.persistence.DatabaseType;
+import org.think2framework.core.datasource.DatabaseType;
 
 /**
  * Created by zhoubin on 16/7/8. 数据源 支持mysql sqlserver sqlite oracle redis

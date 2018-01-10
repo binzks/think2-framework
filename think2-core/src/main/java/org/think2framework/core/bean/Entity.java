@@ -3,72 +3,34 @@ package org.think2framework.core.bean;
 import java.util.List;
 import java.util.Map;
 
+import org.think2framework.core.datasource.Field;
+
 /**
- * 系统模型
+ * 数据orm实体
  */
-public class Model {
+public class Entity {
 
-	private String name; // 模型名称
+	private String table; // 主表表名
 
-	private String query; // 查询数据源名称
+	private String pk; // 主键名称
 
-	private String writer; // 写入数据源名称
+	private Boolean autoIncrement; // 是否自增长
 
-	private String redis; // redis缓存数据源名称
+	private Map<String, Field> fields; // 字段
 
-	private String table; // 模型对应的主表表名
-
-	private String pk; // 模型主表主键名称
-
-	private Boolean autoIncrement = true; // 是否自增长
-
-	private Map<String, Cell> cells; // 模型的单元格
-
-	private List<Filter> filters; // 默认的过滤条件
+	private List<Filter> filters; // 默认过滤条件
 
 	private List<String> groups; // 分组
 
 	private List<Order> orders; // 排序
 
+	private List<Join> joins; // 关联
+
 	private List<String> uniques; // 唯一性约束
 
 	private List<String> indexes; // 索引
 
-	private List<Join> joins; // 关联
-
 	private String comment; // 注释
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getQuery() {
-		return query;
-	}
-
-	public void setQuery(String query) {
-		this.query = query;
-	}
-
-	public String getWriter() {
-		return writer;
-	}
-
-	public void setWriter(String writer) {
-		this.writer = writer;
-	}
-
-	public String getRedis() {
-		return redis;
-	}
-
-	public void setRedis(String redis) {
-		this.redis = redis;
-	}
 
 	public String getTable() {
 		return table;
@@ -94,12 +56,12 @@ public class Model {
 		this.autoIncrement = autoIncrement;
 	}
 
-	public Map<String, Cell> getCells() {
-		return cells;
+	public Map<String, Field> getFields() {
+		return fields;
 	}
 
-	public void setCells(Map<String, Cell> cells) {
-		this.cells = cells;
+	public void setFields(Map<String, Field> fields) {
+		this.fields = fields;
 	}
 
 	public List<Filter> getFilters() {
@@ -126,6 +88,14 @@ public class Model {
 		this.orders = orders;
 	}
 
+	public List<Join> getJoins() {
+		return joins;
+	}
+
+	public void setJoins(List<Join> joins) {
+		this.joins = joins;
+	}
+
 	public List<String> getUniques() {
 		return uniques;
 	}
@@ -140,14 +110,6 @@ public class Model {
 
 	public void setIndexes(List<String> indexes) {
 		this.indexes = indexes;
-	}
-
-	public List<Join> getJoins() {
-		return joins;
-	}
-
-	public void setJoins(List<Join> joins) {
-		this.joins = joins;
 	}
 
 	public String getComment() {

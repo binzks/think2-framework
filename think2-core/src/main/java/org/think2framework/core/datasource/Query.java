@@ -3,8 +3,6 @@ package org.think2framework.core.datasource;
 import java.util.List;
 import java.util.Map;
 
-import org.think2framework.core.persistence.Operator;
-
 /**
  * 写入生成器接口
  */

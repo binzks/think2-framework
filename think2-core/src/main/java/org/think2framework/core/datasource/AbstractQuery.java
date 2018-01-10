@@ -15,8 +15,6 @@ import org.think2framework.core.bean.Order;
 import org.think2framework.core.bean.SqlObject;
 import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.exception.SystemMessage;
-import org.think2framework.core.persistence.Operator;
-import org.think2framework.core.persistence.Sort;
 import org.think2framework.core.utils.StringUtils;
 
 /**

@@ -25,45 +25,15 @@ public class Mysql extends AbstractDatasource {
 	}
 
 	@Override
-	public Field createStringField(String name, Boolean nullable, String join, String alias, String defaultValue,
-			Integer length, String comment) {
-		return new StringField(name, nullable, join, alias, defaultValue, length, comment);
+	public Field createField(FieldType fieldType, String name, Boolean nullable, String join, String alias,
+			String defaultValue, Integer length, Integer scale, String comment) {
+		return new MysqlField(fieldType, name, nullable, join, alias, length, scale, defaultValue, comment);
 	}
 
 	@Override
-	public Field createIntegerField(String name, Boolean nullable, String join, String alias, String defaultValue,
-			Integer length, String comment) {
-		return new IntegerField(name, nullable, join, alias, defaultValue, length, comment);
-	}
-
-	@Override
-	public Field createBooleanField(String name, Boolean nullable, String join, String alias, String defaultValue,
-			String comment) {
-		return new BooleanField(name, nullable, join, alias, defaultValue, comment);
-	}
-
-	@Override
-	public Field createFloatField(String name, Boolean nullable, String join, String alias, String defaultValue,
-			Integer length, Integer scale, String comment) {
-		return new FloatField(name, nullable, join, alias, length, scale, defaultValue, comment);
-	}
-
-	@Override
-	public Field createTextField(String name, Boolean nullable, String join, String alias, String defaultValue,
-			String comment) {
-		return new TextField(name, nullable, join, alias, defaultValue, comment);
-	}
-
-	@Override
-	public Field createJsonField(String name, Boolean nullable, String join, String alias, String defaultValue,
-			String comment) {
-		return new JsonField(name, nullable, join, alias, defaultValue, comment);
-	}
-
-	@Override
-	public Query createQuery(String table, String pk, Map<String, Field> fields, Redis redis, List<Filter> filters,
-			List<String> groups, List<Order> orders, List<Join> joins) {
-		return new MysqlQuery(table, pk, fields, redis, filters, groups, orders, joins, jdbcTemplate);
+	public Query createQuery(String table, String pk, Map<String, Field> fields, List<Filter> filters,
+			List<String> groups, List<Order> orders, List<Join> joins, Redis redis) {
+		return new MysqlQuery(table, pk, fields, filters, groups, orders, joins, redis, jdbcTemplate);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package org.think2framework.core.persistence;
+package org.think2framework.core.datasource;
 
 /**
  * 数据库查询条件运算符

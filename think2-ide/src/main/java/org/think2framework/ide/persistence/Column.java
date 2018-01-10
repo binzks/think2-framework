@@ -1,4 +1,4 @@
-package org.think2framework.core.persistence;
+package org.think2framework.ide.persistence;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;

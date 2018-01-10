@@ -1,4 +1,4 @@
-package org.think2framework.core.persistence;
+package org.think2framework.ide.persistence;
 
 /**
  * 列定义的标签

@@ -11,14 +11,14 @@ import org.think2framework.core.bean.Order;
 import org.think2framework.core.bean.SqlObject;
 import org.think2framework.core.datasource.AbstractQuery;
 import org.think2framework.core.datasource.Field;
+import org.think2framework.core.datasource.Operator;
 import org.think2framework.core.datasource.Redis;
-import org.think2framework.core.persistence.Operator;
 import org.think2framework.core.utils.StringUtils;
 
 /**
  * mysql查询生成器
  */
-public class MysqlQuery extends AbstractQuery {
+public class MysqlQuery extends AbstractQuery implements Cloneable {
 
 	private String table; // 主表表名
 
@@ -26,8 +26,8 @@ public class MysqlQuery extends AbstractQuery {
 
 	private String defaultFields; // 默认查询字段
 
-	public MysqlQuery(String table, String pk, Map<String, Field> fields, Redis redis, List<Filter> filters,
-			List<String> groups, List<Order> orders, List<Join> joins, JdbcTemplate jdbcTemplate) {
+	public MysqlQuery(String table, String pk, Map<String, Field> fields, List<Filter> filters, List<String> groups,
+			List<Order> orders, List<Join> joins, Redis redis, JdbcTemplate jdbcTemplate) {
 		super(pk, fields, redis, filters, groups, orders, jdbcTemplate);
 		this.table = table;
 		if (null == joins || joins.size() == 0) {

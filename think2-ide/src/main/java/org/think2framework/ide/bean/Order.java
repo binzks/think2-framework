@@ -1,8 +1,8 @@
-package org.think2framework.core.bean;
-
-import org.think2framework.core.datasource.Sort;
+package org.think2framework.ide.bean;
 
 import java.util.List;
+
+import org.think2framework.core.datasource.Sort;
 
 /**
  * 查询实体的排序

@@ -1,4 +1,4 @@
-package org.think2framework.core.persistence;
+package org.think2framework.ide.persistence;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -3,7 +3,6 @@ package org.think2framework.ide;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.think2framework.core.bean.Param;
 import org.think2framework.core.utils.JsonUtils;
 import org.think2framework.core.utils.StringUtils;
 
@@ -30,16 +29,16 @@ public class Configuration implements ApplicationContextAware {
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		if (!initialized) {
 			System.setProperty("jsse.enableSNIExtension", "false");
-			Param param =new Param();
-			param.setName("test");
-			param.setModel("model");
-			param.setKey("id");
-			param.setDisplay("name");
-			Map<String, String> map= new HashMap<>();
-			map.put("1", "作废");
-			map.put("0", "有效");
-			param.setValues(map);
-			JsonUtils.writerFile("/Users/zhoubin/Desktop/1.json", param);
+//			Param param =new Param();
+//			param.setName("test");
+//			param.setModel("model");
+//			param.setKey("id");
+//			param.setDisplay("name");
+//			Map<String, String> map= new HashMap<>();
+//			map.put("1", "作废");
+//			map.put("0", "有效");
+//			param.setValues(map);
+//			JsonUtils.writerFile("/Users/zhoubin/Desktop/1.json", param);
 //			DatabaseFactory.append(type, name, minIdle, maxIdle, initialSize, timeout, db, host, port, username,
 //					password);
 			if (StringUtils.isNotBlank(packages)) {
