@@ -22,7 +22,7 @@ public @interface Filter {
 	 * 
 	 * @return 过滤类型
 	 */
-	String type() default "=";
+	Operator operator() default Operator.EQUAL;
 
 	/**
 	 * 过滤值数组，between为两个，其他为一个值

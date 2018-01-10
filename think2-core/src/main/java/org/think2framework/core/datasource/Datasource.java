@@ -152,35 +152,41 @@ public interface Datasource {
 			String comment);
 
 	/**
-	 * 根据数据源创建一个数据库对应的实体
+	 * 根据数据源创建一个查询生成器
 	 * 
 	 * @param table
 	 *            主表名称
 	 * @param pk
 	 *            主键名称
-	 * @param autoIncrement
-	 *            是否自增长
 	 * @param fields
-	 *            字段定义
+	 *            字段
+	 * @param redis
+	 *            缓存redis
 	 * @param filters
-	 *            过滤条件
+	 *            默认过滤条件
 	 * @param groups
 	 *            分组
 	 * @param orders
 	 *            排序
-	 * @param redis
-	 *            redis缓存数据库名称
-	 * @param uniques
-	 *            唯一性约束
-	 * @param indexes
-	 *            索引
 	 * @param joins
 	 *            关联
-	 * @param comment
-	 *            注释
-	 * @return 实体
+	 * @return 查询生成器
 	 */
-	Entity createEntity(String table, String pk, Boolean autoIncrement, Map<String, Field> fields, List<Filter> filters,
-                        List<String> groups, List<Order> orders, Redis redis, List<String> uniques, List<String> indexes,
-                        List<Join> joins, String comment);
+	Query createQuery(String table, String pk, Map<String, Field> fields, Redis redis, List<Filter> filters,
+			List<String> groups, List<Order> orders, List<Join> joins);
+
+    /**
+     * 根据数据源创建一个写入生成器
+     * @param table 主表名称
+     * @param pk 主键名称
+     * @param autoIncrement 是否自增长
+     * @param fields 字段
+     * @param uniques
+     * @param indexes
+     * @param comment
+     * @return
+     */
+	Writer createWriter(String table, String pk, Boolean autoIncrement, Map<String, Field> fields, List<String> uniques,
+			List<String> indexes, String comment);
+
 }

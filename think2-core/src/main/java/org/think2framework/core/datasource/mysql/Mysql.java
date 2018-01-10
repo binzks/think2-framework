@@ -6,10 +6,7 @@ import java.util.Map;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
 import org.think2framework.core.bean.Order;
-import org.think2framework.core.datasource.AbstractDatasource;
-import org.think2framework.core.datasource.Entity;
-import org.think2framework.core.datasource.Field;
-import org.think2framework.core.datasource.Redis;
+import org.think2framework.core.datasource.*;
 
 /**
  * mysql
@@ -64,10 +61,15 @@ public class Mysql extends AbstractDatasource {
 	}
 
 	@Override
-	public Entity createEntity(String table, String pk, Boolean autoIncrement, Map<String, Field> fields,
-			List<Filter> filters, List<String> groups, List<Order> orders, Redis redis, List<String> uniques,
-			List<String> indexes, List<Join> joins, String comment) {
-		return new MysqlEntity(table, pk, autoIncrement, fields, filters, groups, orders, jdbcTemplate, redis, uniques,
-				indexes, joins, comment);
+	public Query createQuery(String table, String pk, Map<String, Field> fields, Redis redis, List<Filter> filters,
+			List<String> groups, List<Order> orders, List<Join> joins) {
+		return new MysqlQuery(table, pk, fields, redis, filters, groups, orders, joins, jdbcTemplate);
 	}
+
+	@Override
+	public Writer createWriter(String table, String pk, Boolean autoIncrement, Map<String, Field> fields,
+			List<String> uniques, List<String> indexes, String comment) {
+		return new MysqlWriter(table, pk, autoIncrement, fields, uniques, indexes, comment, jdbcTemplate);
+	}
+
 }

@@ -1,7 +1,7 @@
 package org.think2framework.core.datasource.mysql;
 
 import org.think2framework.core.datasource.AbstractField;
-import org.think2framework.core.datasource.Entity;
+import org.think2framework.core.datasource.Query;
 import org.think2framework.core.utils.StringUtils;
 
 /**
@@ -41,7 +41,7 @@ public class StringField extends AbstractField {
      */
     protected String fieldCreateSql(String name, String join, String type, Boolean nullable, String defaultValue,
                                         String comment) {
-        if (!StringUtils.isBlank(join) && !Entity.MAIN_TABLE_ALIAS.equals(join)) {
+        if (!StringUtils.isBlank(join) && !Query.MAIN_TABLE_ALIAS.equals(join)) {
             return "";
         }
         StringBuilder sql = new StringBuilder();

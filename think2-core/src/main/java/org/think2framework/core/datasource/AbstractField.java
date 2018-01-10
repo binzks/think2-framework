@@ -21,7 +21,7 @@ public abstract class AbstractField implements Field {
 		this.name = name;
 		this.nullable = nullable;
 		if (StringUtils.isBlank(join)) {
-			this.key = Entity.MAIN_TABLE_ALIAS + "." + name;
+			this.key = Query.MAIN_TABLE_ALIAS + "." + name;
 		} else {
 			this.key = join + "." + name;
 		}

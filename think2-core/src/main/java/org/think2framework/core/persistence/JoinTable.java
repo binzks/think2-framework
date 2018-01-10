@@ -36,7 +36,7 @@ public @interface JoinTable {
 	 * 
 	 * @return 关联类型
 	 */
-	String type() default "left join";
+	JoinType type() default JoinType.LEFT;
 
 	/**
 	 * 关联表的字段

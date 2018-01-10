@@ -1,8 +1,6 @@
 package org.think2framework.core.datasource.mysql;
 
-import org.think2framework.core.datasource.Entity;
 import org.think2framework.core.datasource.AbstractField;
-import org.think2framework.core.utils.StringUtils;
 
 /**
  * 主键
@@ -11,18 +9,8 @@ public class PrimaryField extends AbstractField {
 
 	private String createSql; // 创建sql
 
-	public PrimaryField() {
-		super(Entity.PRIMARY_KEY, false, null, null, null);
-		setCreateSql(true);
-	}
-
-	public PrimaryField(String name) {
-		super(StringUtils.isBlank(name) ? Entity.MAIN_TABLE_ALIAS : name, false, null, null, null);
-		setCreateSql(true);
-	}
-
 	public PrimaryField(String name, Boolean autoIncrement) {
-		super(StringUtils.isBlank(name) ? Entity.MAIN_TABLE_ALIAS : name, false, null, null, null);
+		super(name, false, null, null, null);
 		setCreateSql(autoIncrement);
 	}
 

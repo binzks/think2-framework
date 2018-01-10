@@ -1,15 +1,14 @@
 package org.think2framework.core.datasource;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.think2framework.core.ClassUtils;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Order;
@@ -21,25 +20,21 @@ import org.think2framework.core.persistence.Sort;
 import org.think2framework.core.utils.StringUtils;
 
 /**
- * 抽象数据库实体
+ * 抽象查询生成器
  */
-public abstract class AbstractEntity implements Entity {
+public abstract class AbstractQuery implements Query {
 
-	private static final Logger logger = LogManager.getLogger(AbstractEntity.class); // log4j日志对象
-
-	protected String table; // 主表名称
+	private static final Logger logger = LogManager.getLogger(AbstractQuery.class); // log4j日志对象
 
 	protected String pk; // 主键名称
-
-	protected Boolean autoIncrement; // 是否自增长
-
-	protected Map<String, Field> fields; // 字段
 
 	protected Integer page; // 第几页
 
 	protected Integer size; // 每页大小
 
-	protected Redis redis; // 对应redis，可能为null
+	protected Map<String, Field> fields; // 字段
+
+	private Redis redis; // 对应redis，可能为null
 
 	protected List<Filter> filters; // 过滤条件
 
@@ -51,73 +46,27 @@ public abstract class AbstractEntity implements Entity {
 
 	private JdbcTemplate jdbcTemplate; // spring jdbcTemplate
 
-	public AbstractEntity(String table, String pk, Boolean autoIncrement, Map<String, Field> fields,
-			List<Filter> filters, List<String> groups, List<Order> orders, JdbcTemplate jdbcTemplate, Redis redis) {
-		this.table = table;
+	public AbstractQuery(String pk, Map<String, Field> fields, Redis redis, List<Filter> filters, List<String> groups,
+			List<Order> orders, JdbcTemplate jdbcTemplate) {
 		this.pk = pk;
-		this.autoIncrement = autoIncrement;
 		this.fields = fields;
+		this.redis = redis;
 		this.filters = filters;
 		this.groups = groups;
 		this.orders = orders;
 		this.jdbcTemplate = jdbcTemplate;
-		this.redis = redis;
 	}
-
-	/**
-	 * 获取字段，如果字段不存在则抛出异常
-	 *
-	 * @param name
-	 *            字段名称
-	 * @return 字段
-	 */
-	private Field getField(String name) {
-		Field field = fields.get(name);
-		if (null == field) {
-			throw new MessageException(SystemMessage.NON_EXIST.getCode(), "字段[" + name + "]");
-		}
-		return field;
-	}
-
-	/**
-	 * 生成实体对应的表创建sql
-	 * 
-	 * @return 创建sql
-	 */
-	public abstract String createSql();
-
-	/**
-	 * 根据待新增的对象生成新增sql和值，如果是map类型特殊处理
-	 * 
-	 * @param instance
-	 *            对象数据
-	 * @param id
-	 *            如果不是自增长，则是guid，否则为null
-	 * @return 新增sql和值
-	 */
-	public abstract SqlObject createInsert(Object instance, Object id);
-
-	/**
-	 * 根据待修改的数据生成修改sql和值，如果是map类型特殊处理
-	 * 
-	 * @param instance
-	 *            对象数据
-	 * @param keys
-	 *            作为修改条件的关键字段
-	 * @return 修改sql和值
-	 */
-	public abstract SqlObject createUpdate(Object instance, String... keys);
 
 	/**
 	 * 获取实体查询的时候默认的查询字段
-	 * 
+	 *
 	 * @return 查询字段
 	 */
 	public abstract String getDefaultFields();
 
 	/**
 	 * 生成查询sql和值，将查询字段、关联、查询条件和分组拼成sql语句
-	 * 
+	 *
 	 * @param fields
 	 *            查询字段，默认为全实体的所有字段
 	 * @return 查询sql和值
@@ -126,128 +75,11 @@ public abstract class AbstractEntity implements Entity {
 
 	/**
 	 * 获取查询的字段，如果自定义字段不为空则返回自定义字段，如果为空则获取默认查询字段
-	 * 
+	 *
 	 * @return 查询字段
 	 */
 	private String getSelectFields() {
 		return StringUtils.isBlank(columnSql) ? getDefaultFields() : columnSql;
-	}
-
-	@Override
-	public boolean create() {
-		Boolean result = false;
-		try {
-			queryForList("SELECT 1 FROM " + table + " WHERE 1=2");
-		} catch (Exception e) {
-			if (null != e.getCause()) {
-				String msg = e.getCause().getMessage();
-				if (msg.contains("no such table") || (msg.contains("Table") && msg.contains("doesn't exist"))) {
-					jdbcTemplate.execute(createSql());
-					result = true;
-				} else {
-					throw new RuntimeException(e);
-				}
-			} else {
-				throw new RuntimeException(e);
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public Object insert(Object instance) {
-		Object id = null;
-		if (autoIncrement) {
-			id = UUID.randomUUID().toString();
-		}
-		SqlObject sqlObject = createInsert(instance, id);
-		return insert(sqlObject.getSql(), autoIncrement, sqlObject.getValues());
-	}
-
-	@Override
-	public <T> int[] insert(List<T> list) {
-		String sql = null;
-		List<Object[]> batchArgs = new ArrayList<>();
-		for (Object object : list) {
-			Object id = null;
-			if (autoIncrement) {
-				id = UUID.randomUUID().toString();
-			}
-			SqlObject sqlObject = createInsert(object, id);
-			if (StringUtils.isBlank(sql)) {
-				sql = sqlObject.getSql();
-			}
-			batchArgs.addAll(Collections.singleton(sqlObject.getValues().toArray()));
-		}
-		return batchUpdate(sql, batchArgs);
-	}
-
-	@Override
-	public int update(Object instance, String... keys) {
-		SqlObject sqlObject = createUpdate(instance, keys);
-		return update(sqlObject.getSql(), sqlObject.getValues());
-	}
-
-	@Override
-	public <T> int[] update(List<T> list, String... keys) {
-		String sql = null;
-		List<Object[]> batchArgs = new ArrayList<>();
-		for (Object object : list) {
-			SqlObject sqlObject = createUpdate(object, keys);
-			if (StringUtils.isBlank(sql)) {
-				sql = sqlObject.getSql();
-			}
-			batchArgs.addAll(Collections.singleton(sqlObject.getValues().toArray()));
-		}
-		return batchUpdate(sql, batchArgs);
-	}
-
-	@Override
-	public Object save(Object instance, String... keys) {
-		if (update(instance, keys) == 1) {
-			return -1;
-		} else {
-			return insert(instance);
-		}
-	}
-
-	@Override
-	public <T> String[] save(List<T> list, String... keys) {
-		String[] result = new String[list.size()];
-		for (int i = 0; i < list.size(); i++) {
-			result[i] = save(list.get(i), keys).toString();
-		}
-		return result;
-	}
-
-	@Override
-	public int delete(Object id) {
-		return delete(pk, id);
-	}
-
-	@Override
-	public Object insert(String sql, Boolean autoIncrement, Object... args) {
-		logger.debug("Insert sql: {} values: {} autoIncrement: {}", sql, args, autoIncrement);
-		if (autoIncrement) {
-			KeyHolder keyHolder = new GeneratedKeyHolder();
-			jdbcTemplate.update(con -> {
-				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-				for (int i = 0; i < args.length; i++) {
-					ps.setObject(i + 1, ClassUtils.getDatabaseValue(args[i]));
-				}
-				return ps;
-			}, keyHolder);
-			return keyHolder.getKey().intValue();
-		} else {
-			jdbcTemplate.update(sql, args);
-			return "";
-		}
-	}
-
-	@Override
-	public int update(String sql, Object... args) {
-		logger.debug("Update sql: {} values: {}", sql, args);
-		return jdbcTemplate.update(sql, args);
 	}
 
 	@Override
@@ -293,10 +125,19 @@ public abstract class AbstractEntity implements Entity {
 		}
 	}
 
-	@Override
-	public int[] batchUpdate(String sql, List<Object[]> batchArgs) {
-		logger.debug("batchUpdate sql: {} values: {}", sql, batchArgs);
-		return jdbcTemplate.batchUpdate(sql, batchArgs);
+	/**
+	 * 获取字段，如果字段不存在则抛出异常
+	 *
+	 * @param name
+	 *            字段名称
+	 * @return 字段
+	 */
+	private Field getField(String name) {
+		Field field = fields.get(name);
+		if (null == field) {
+			throw new MessageException(SystemMessage.NON_EXIST.getCode(), "字段[" + name + "]");
+		}
+		return field;
 	}
 
 	@Override
