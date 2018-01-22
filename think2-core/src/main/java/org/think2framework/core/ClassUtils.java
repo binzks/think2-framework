@@ -8,6 +8,7 @@ import java.util.*;
 
 import org.springframework.util.LinkedCaseInsensitiveMap;
 import org.think2framework.core.exception.MessageException;
+import org.think2framework.core.persistence.Cell;
 import org.think2framework.core.utils.JsonUtils;
 import org.think2framework.core.utils.StringUtils;
 
@@ -35,15 +36,15 @@ public class ClassUtils {
 	 */
 	private static String getFieldKey(Field field) {
 		String key = field.getName();
-		// Column column = field.getAnnotation(Column.class);
-		// if (null != column) {
-		// if (StringUtils.isNotBlank(column.name())) {
-		// key = column.name();
-		// }
-		// if (StringUtils.isNotBlank(column.alias())) {
-		// key = column.alias();
-		// }
-		// }
+		Cell cell = field.getAnnotation(Cell.class);
+		if (null != cell) {
+			if (StringUtils.isNotBlank(cell.name())) {
+				key = cell.name();
+			}
+			if (StringUtils.isNotBlank(cell.alias())) {
+				key = cell.alias();
+			}
+		}
 		return key;
 	}
 

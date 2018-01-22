@@ -7,6 +7,7 @@ import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
 import org.think2framework.core.bean.Order;
 import org.think2framework.core.datasource.*;
+import org.think2framework.core.persistence.FieldType;
 
 /**
  * oracle

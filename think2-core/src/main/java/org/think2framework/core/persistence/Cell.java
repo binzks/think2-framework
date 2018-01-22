@@ -1,4 +1,4 @@
-package org.think2framework.ide.persistence;
+package org.think2framework.core.persistence;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -8,17 +8,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * 模型列定义
+ * 模型单元格定义
  */
 @Target({ METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface Column {
+public @interface Cell {
 
 	String name() default "";// 字段名称，默认空的时候取java定义字段的名称
 
 	String title() default "";// 标题，如果为空则取name
 
-	String tag() default "";// 字段标签，默认是文本，如果字段定义是整型或者长整型则自动修改为整型，如果是浮点则修改为浮点
+	FieldType type() default FieldType.TEXT;// 字段标签，默认是文本，如果字段定义是整型或者长整型则自动修改为整型，如果是浮点则修改为浮点
 
 	boolean nullable() default true;// 字段是否可空，默认可空
 
@@ -31,6 +31,8 @@ public @interface Column {
 	int scale() default 0;// 字段精度(小数位数)，默认0
 
 	String defaultValue() default "";// 字段默认值，默认空不设置默认值，now当前时间，user.id登录用户id，user.name登录用户名，其他则填值
+
+	String param() default ""; // 系统参数名称
 
 	boolean search() default false;// 是否作为搜索项，默认false
 

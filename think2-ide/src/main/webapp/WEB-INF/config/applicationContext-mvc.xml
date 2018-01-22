@@ -36,7 +36,7 @@
 
     <!-- Controller Service -->
     <context:component-scan
-            base-package="org.think2framework.core.controller"/>
+            base-package="org.think2framework.core.controller,org.think2framework.ide.controller"/>
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 

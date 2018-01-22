@@ -1,8 +1,10 @@
 package org.think2framework.core.datasource.mysql;
 
+import static org.think2framework.core.persistence.FieldType.*;
+
 import org.think2framework.core.datasource.AbstractField;
-import org.think2framework.core.datasource.FieldType;
 import org.think2framework.core.datasource.Query;
+import org.think2framework.core.persistence.FieldType;
 import org.think2framework.core.utils.StringUtils;
 
 public class MysqlField extends AbstractField {
@@ -12,28 +14,55 @@ public class MysqlField extends AbstractField {
 	public MysqlField(FieldType fieldType, String name, Boolean nullable, String join, String alias, Integer length,
 			Integer scale, String defaultValue, String comment) {
 		super(name, nullable, join, alias, defaultValue);
-		switch (fieldType) {
-		case STRING:
+		if (TEXT.equals(fieldType) || EMAIL.equals(fieldType) || FILE.equals(fieldType) || IMAGE.equals(fieldType)
+				|| ITEM.equals(fieldType) || MOBILE.equals(fieldType) || MULTIPLE.equals(fieldType)
+				|| PASSWORD.equals(fieldType) || TELEPHONE.equals(fieldType) || DATA_ITEM.equals(fieldType)
+				|| DATA_MULTIPLE.equals(fieldType)) {
 			createSql = fieldCreateSql(name, join, "VARCHAR(" + length + ")", nullable, defaultValue, comment);
-			break;
-		case INTEGER:
+		} else if (INT.equals(fieldType) || DATA_ITEM_INT.equals(fieldType) || ITEM_INT.equals(fieldType)) {
 			createSql = fieldCreateSql(name, join, "INT(" + (null == length ? 11 : length) + ")", nullable,
 					defaultValue, comment);
-			break;
-		case BOOLEAN:
-			createSql = fieldCreateSql(name, join, "int(1)", nullable, defaultValue, comment);
-			break;
-		case FLOAT:
+		} else if (BOOL.equals(fieldType)) {
+			createSql = fieldCreateSql(name, join, "INT(1)", nullable, defaultValue, comment);
+		} else if (FLOAT.equals(fieldType)) {
 			createSql = fieldCreateSql(name, join, "DECIMAL(" + length + "," + scale + ")", nullable, defaultValue,
 					comment);
-			break;
-		case JSON:
+		} else if (JSON.equals(fieldType) || HTML.equals(fieldType) || TEXTAREA.equals(fieldType)) {
 			createSql = fieldCreateSql(name, join, "LONG TEXT", nullable, defaultValue, comment);
-			break;
-		case TEXT:
-			createSql = fieldCreateSql(name, join, "TEXT", nullable, defaultValue, comment);
-			break;
+		} else if (TIMESTAMP.equals(fieldType)) {
+			createSql = fieldCreateSql(name, join, "INT(10)", nullable, defaultValue, comment);
+		} else if (DATE.equals(fieldType) || DATETIME.equals(fieldType)) {
+			createSql = fieldCreateSql(name, join, "DATETIME", nullable, defaultValue, comment);
 		}
+
+		// switch (fieldType) {
+		// case STRING:
+		// createSql = fieldCreateSql(name, join, "VARCHAR(" + length + ")", nullable,
+		// defaultValue, comment);
+		// break;
+		// case INTEGER:
+		// createSql = fieldCreateSql(name, join, "INT(" + (null == length ? 11 :
+		// length) + ")", nullable,
+		// defaultValue, comment);
+		// break;
+		// case BOOLEAN:
+		// createSql = fieldCreateSql(name, join, "int(1)", nullable, defaultValue,
+		// comment);
+		// break;
+		// case FLOAT:
+		// createSql = fieldCreateSql(name, join, "DECIMAL(" + length + "," + scale +
+		// ")", nullable, defaultValue,
+		// comment);
+		// break;
+		// case JSON:
+		// createSql = fieldCreateSql(name, join, "LONG TEXT", nullable, defaultValue,
+		// comment);
+		// break;
+		// case TEXT:
+		// createSql = fieldCreateSql(name, join, "TEXT", nullable, defaultValue,
+		// comment);
+		// break;
+		// }
 	}
 
 	@Override

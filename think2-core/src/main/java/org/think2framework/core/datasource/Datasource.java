@@ -6,6 +6,7 @@ import java.util.Map;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
 import org.think2framework.core.bean.Order;
+import org.think2framework.core.persistence.FieldType;
 
 /**
  * 数据源接口
@@ -47,7 +48,7 @@ public interface Datasource {
 	 * @return 字段
 	 */
 	Field createField(FieldType fieldType, String name, Boolean nullable, String join, String alias,
-			String defaultValue, Integer length, Integer scale, String comment);
+                      String defaultValue, Integer length, Integer scale, String comment);
 
 	/**
 	 * 根据数据源创建一个查询生成器

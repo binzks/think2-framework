@@ -16,7 +16,7 @@ import org.think2framework.core.exception.SystemMessage;
 import org.think2framework.core.utils.StringUtils;
 
 /**
- * 模型工厂
+ * 数据持久化工厂
  */
 public class OrmFactory {
 

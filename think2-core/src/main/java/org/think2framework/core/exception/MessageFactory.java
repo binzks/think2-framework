@@ -23,15 +23,6 @@ public class MessageFactory {
 	}
 
 	/**
-	 * 获取业务常量数量，常量总数减去预定义的系统消息数量
-	 * 
-	 * @return 业务常量数量
-	 */
-	public static int size() {
-		return messages.size() - SystemMessage.values().length;
-	}
-
-	/**
 	 * 追加一条消息定义，如果编号已经存在则不追加
 	 * 
 	 * @param code

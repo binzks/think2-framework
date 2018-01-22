@@ -1,4 +1,4 @@
-package org.think2framework.ide.persistence;
+package org.think2framework.core.persistence;
 
 import java.lang.annotation.*;
 
