@@ -97,7 +97,7 @@ public class Configuration implements ApplicationContextAware {
 		for (File file : files) {
 			List<Model> models = JsonUtils.readFile(file, new TypeReference<List<Model>>() {
 			});
-			// ModelFactory.append(models);
+			ModelFactory.append(models);
 		}
 		modelInitialized = true;
 	}

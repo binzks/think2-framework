@@ -32,6 +32,25 @@ public class Entity {
 
 	private String comment; // 注释
 
+	public Entity() {
+	}
+
+	public Entity(String table, String pk, Boolean autoIncrement, Map<String, Field> fields, List<Filter> filters,
+			List<String> groups, List<Order> orders, List<Join> joins, List<String> uniques, List<String> indexes,
+			String comment) {
+		this.table = table;
+		this.pk = pk;
+		this.autoIncrement = autoIncrement;
+		this.fields = fields;
+		this.filters = filters;
+		this.groups = groups;
+		this.orders = orders;
+		this.joins = joins;
+		this.uniques = uniques;
+		this.indexes = indexes;
+		this.comment = comment;
+	}
+
 	public String getTable() {
 		return table;
 	}

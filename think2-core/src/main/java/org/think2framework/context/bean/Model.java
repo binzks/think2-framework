@@ -2,6 +2,7 @@ package org.think2framework.context.bean;
 
 import java.util.List;
 
+import org.think2framework.core.bean.Action;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
 import org.think2framework.core.bean.Order;
@@ -19,6 +20,10 @@ public class Model {
 
 	private Boolean autoIncrement = true; // 是否自增长
 
+	private String title; // 标题
+
+	private Integer rowSize; // 列表页面每次显示多少条数据
+
 	private List<Cell> cells; // 模型的单元格
 
 	private List<Filter> filters; // 默认的过滤条件
@@ -32,6 +37,8 @@ public class Model {
 	private List<String> indexes; // 索引
 
 	private List<Join> joins; // 关联
+
+	private List<Action> actions; // 操作按钮
 
 	private String comment; // 注释
 
@@ -65,6 +72,22 @@ public class Model {
 
 	public void setAutoIncrement(Boolean autoIncrement) {
 		this.autoIncrement = autoIncrement;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Integer getRowSize() {
+		return rowSize;
+	}
+
+	public void setRowSize(Integer rowSize) {
+		this.rowSize = rowSize;
 	}
 
 	public List<Cell> getCells() {
@@ -121,6 +144,14 @@ public class Model {
 
 	public void setJoins(List<Join> joins) {
 		this.joins = joins;
+	}
+
+	public List<Action> getActions() {
+		return actions;
+	}
+
+	public void setActions(List<Action> actions) {
+		this.actions = actions;
 	}
 
 	public String getComment() {

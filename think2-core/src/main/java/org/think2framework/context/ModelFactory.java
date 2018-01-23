@@ -1,18 +1,26 @@
 package org.think2framework.context;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.think2framework.context.bean.Cell;
 import org.think2framework.context.bean.Model;
 import org.think2framework.context.bean.ModelContext;
 import org.think2framework.core.OrmFactory;
+import org.think2framework.core.bean.Column;
+import org.think2framework.core.bean.Entity;
+import org.think2framework.core.bean.View;
+import org.think2framework.core.datasource.Datasource;
+import org.think2framework.core.datasource.Field;
 import org.think2framework.core.datasource.Query;
 import org.think2framework.core.datasource.Writer;
 import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.exception.SystemMessage;
+import org.think2framework.core.persistence.FieldType;
 import org.think2framework.core.utils.PackageUtils;
 import org.think2framework.core.utils.StringUtils;
 
@@ -25,6 +33,7 @@ public class ModelFactory {
 
 	private static Map<String, ModelContext> modelContextMap = new HashMap<>(); // 模型对应的语境，数据库配置
 
+	private static Map<String, View> viewMap = new HashMap<>(); // 视图
 
 	/**
 	 * 追加一个模型语境，如果已经存在则警告，不追加
@@ -43,6 +52,59 @@ public class ModelFactory {
 	}
 
 	/**
+	 * 追加一个模型
+	 * 
+	 * @param model
+	 *            模型
+	 */
+	public static synchronized void append(Model model) {
+		ModelContext modelContext = getModelContext(model.getName());
+		Datasource datasource = OrmFactory.getDatasource(modelContext.getQuery());
+		Map<String, Field> fieldMap = new LinkedHashMap<>(); // 数据实体的字段
+		Map<String, Column> columnMap = new LinkedHashMap<>(); // 视图的列
+		// 主键
+		String pk = model.getPk();
+		fieldMap.put(pk, datasource.createPrimaryField(pk, model.getAutoIncrement()));
+		if (model.getAutoIncrement()) {
+			columnMap.put(pk, new Column(pk, FieldType.INT, false, "主键", false, false, true, false, false, ""));
+		} else {
+			columnMap.put(pk, new Column(pk, FieldType.TEXT, false, "主键", false, false, true, false, false, ""));
+		}
+		for (Cell cell : model.getCells()) {
+			String name = cell.getName();
+			if (StringUtils.isNotBlank(cell.getAlias())) {
+				name = cell.getAlias();
+			}
+			fieldMap.put(name, datasource.createField(cell.getType(), name, cell.getNullable(), cell.getJoin(),
+					cell.getAlias(), cell.getDefaultValue(), cell.getLength(), cell.getScale(), cell.getComment()));
+			columnMap.put(name, new Column(name, cell.getType(), cell.getNullable(), cell.getTitle(), cell.getSearch(),
+					cell.getDisplay(), cell.getDetail(), cell.getAdd(), cell.getEdit(), cell.getParam()));
+		}
+		OrmFactory.append(model.getName(),
+				new Entity(model.getTable(), model.getPk(), model.getAutoIncrement(), fieldMap, model.getFilters(),
+						model.getGroups(), model.getOrders(), model.getJoins(), model.getUniques(), model.getIndexes(),
+						model.getComment()));
+		appendView(model.getName(), new View(model.getTitle(), model.getRowSize(), columnMap, model.getActions()));
+	}
+
+	/**
+	 * 追加一个视图
+	 * 
+	 * @param name
+	 *            视图名称
+	 * @param view
+	 *            视图
+	 */
+	private static synchronized void appendView(String name, View view) {
+		if (null != viewMap.get(name)) {
+			logger.warn("视图[{}]已经存在，忽略追加！", name);
+		} else {
+			viewMap.put(name, view);
+			logger.debug("追加视图[{}][{}]！", name);
+		}
+	}
+
+	/**
 	 * 批量追加模型
 	 *
 	 * @param models
@@ -50,7 +112,7 @@ public class ModelFactory {
 	 */
 	public static synchronized void append(List<Model> models) {
 		for (Model model : models) {
-//			append(model);
+			append(model);
 		}
 	}
 

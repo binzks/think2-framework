@@ -104,7 +104,7 @@ public class OrmFactory {
 	 *            数据源名称
 	 * @return 数据源
 	 */
-	private static Datasource getDatasource(String name) {
+	public static Datasource getDatasource(String name) {
 		Datasource datasource = datasourceMap.get(name);
 		if (null == datasource) {
 			throw new MessageException(SystemMessage.NON_EXIST.getCode(), "数据源" + name);

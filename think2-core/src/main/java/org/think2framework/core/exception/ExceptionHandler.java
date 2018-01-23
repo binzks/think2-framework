@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
-import org.think2framework.core.security.SessionFactory;
 import org.think2framework.core.utils.HttpServletUtils;
 
 //                            _ooOoo_
@@ -52,16 +51,12 @@ public class ExceptionHandler implements HandlerExceptionResolver {
 	public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			Object o, Exception e) {
 		logger.error(e);
-		if (SessionFactory.isLogin(httpServletRequest)) {
-			return new ModelAndView("error", "msg", e.getMessage()); // 返回一个新的ModelAndView，返回为200，否则返回500
-		} else {
-			String message = e.getMessage();
-			if (MessageException.class != e.getClass()) {
-				message = MessageFactory.getJson(SystemMessage.UNKNOWN.getCode(), message);
-			}
-			HttpServletUtils.writeResponse(httpServletResponse, message);
-			return new ModelAndView();
+		String message = e.getMessage();
+		if (MessageException.class != e.getClass()) {
+			message = MessageFactory.getJson(SystemMessage.UNKNOWN.getCode(), message);
 		}
+		HttpServletUtils.writeResponse(httpServletResponse, message);
+		return new ModelAndView();
 	}
 
 }
