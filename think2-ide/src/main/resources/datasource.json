@@ -1,0 +1,11 @@
+[
+  {
+    "name": "think2ide",
+    "type": "MYSQL",
+    "database": "think2ide",
+    "host": "localhost",
+    "port": 3306,
+    "username": "root",
+    "password": "root"
+  }
+]

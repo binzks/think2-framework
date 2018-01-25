@@ -14,33 +14,27 @@
        http://www.springframework.org/schema/mvc/spring-mvc.xsd"
        default-autowire="byName">
 
+    <!--解决中文乱码-->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="defaultCharset" value="UTF-8"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
     <context:annotation-config/>
 
-    <!--<bean class="org.think2framework.context.Configuration">-->
-    <!--<property name="datasource" value="quick-datasource.json"/>-->
-    <!--<property name="constant" value="constants/\\*.json"/>-->
-    <!--&lt;!&ndash;工作流需要在模型之前加载&ndash;&gt;-->
-    <!--<property name="workflow" value="workflows/\\*.json"/>-->
-    <!--<property name="model" value="models/\\*.json"/>-->
-    <!--</bean>-->
-
-    <bean class="org.think2framework.ide.Configuration">
-        <property name="name" value="think2ide"/>
-        <property name="type" value="mysql"/>
-        <property name="host" value="localhost"/>
-        <property name="db" value="think2ide"/>
-        <property name="username" value="root"/>
-        <property name="password" value="root"/>
-        <property name="packages" value="org.think2framework.mvc.bean,org.think2framework.ide.bean"/>
+    <bean class="org.think2framework.context.Configuration">
+        <property name="datasource" value="datasource.json"/>
+        <property name="message" value="message/\\*.json"/>
     </bean>
 
     <!-- Controller Service -->
     <context:component-scan
-            base-package="org.think2framework.core.controller,org.think2framework.ide.controller"/>
+            base-package="org.think2framework.core.exception,org.think2framework.core.controller,org.think2framework.ide.controller"/>
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
-
-    <bean id="exceptionHandler" class="org.think2framework.core.exception.ExceptionHandler"/>
 
     <mvc:interceptors>
         <mvc:interceptor>

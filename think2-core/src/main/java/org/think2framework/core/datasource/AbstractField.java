@@ -15,9 +15,7 @@ public abstract class AbstractField implements Field {
 
 	private String aliasKey; // 表名或关联名称.字段名称 AS 别名
 
-	private String defaultValue; // 默认值
-
-	public AbstractField(String name, Boolean nullable, String join, String alias, String defaultValue) {
+	public AbstractField(String name, Boolean nullable, String join, String alias) {
 		this.name = name;
 		this.nullable = nullable;
 		if (StringUtils.isBlank(join)) {
@@ -30,7 +28,6 @@ public abstract class AbstractField implements Field {
 		} else {
 			this.aliasKey = this.key;
 		}
-		this.defaultValue = defaultValue;
 	}
 
 	@Override
@@ -51,11 +48,6 @@ public abstract class AbstractField implements Field {
 	@Override
 	public Boolean nullable() {
 		return nullable;
-	}
-
-	@Override
-	public String defaultValue() {
-		return defaultValue;
 	}
 
 }

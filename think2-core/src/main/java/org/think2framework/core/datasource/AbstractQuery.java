@@ -81,7 +81,7 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public <T> T queryForObject(String sql, Object[] args, Class<T> requiredType) {
+	public <T> T queryForObjectBySql(String sql, Object[] args, Class<T> requiredType) {
 		logger.debug("queryForObject sql: {} values: {} requiredType: {}", sql, args, requiredType);
 		try {
 			return jdbcTemplate.query(sql, args, rs -> {
@@ -94,7 +94,7 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public Map<String, Object> queryForMap(String sql, Object... args) {
+	public Map<String, Object> queryForMapBySql(String sql, Object... args) {
 		logger.debug("queryForMap sql: {} values: {}", sql, args);
 		try {
 			return jdbcTemplate.queryForMap(sql, args);
@@ -104,7 +104,7 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public <T> List<T> queryForList(String sql, Object[] args, Class<T> elementType) {
+	public <T> List<T> queryForListBySql(String sql, Object[] args, Class<T> elementType) {
 		logger.debug("queryForList Object sql: {} values: {} elementType: {}", sql, args, elementType);
 		try {
 			return jdbcTemplate.query(sql, args, (rs, rowNum) -> ClassUtils.createInstance(elementType, rs));
@@ -114,7 +114,7 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public List<Map<String, Object>> queryForList(String sql, Object... args) {
+	public List<Map<String, Object>> queryForListBySql(String sql, Object... args) {
 		logger.debug("queryForList Map sql: {} values: {}", sql, args);
 		try {
 			return jdbcTemplate.queryForList(sql, args);
@@ -151,7 +151,7 @@ public abstract class AbstractQuery implements Query {
 			key = f.key();
 		}
 		SqlObject sqlObject = createSelect(key);
-		Integer result = queryForObject(sqlObject.getSql(), sqlObject.getValues().toArray(), Integer.class);
+		Integer result = queryForObjectBySql(sqlObject.getSql(), sqlObject.getValues().toArray(), Integer.class);
 		if (null == result) {
 			result = 0;
 		}
@@ -161,7 +161,7 @@ public abstract class AbstractQuery implements Query {
 	@Override
 	public Map<String, Object> queryForMap() {
 		SqlObject sqlObject = createSelect(getSelectFields());
-		return queryForMap(sqlObject.getSql(), sqlObject.getValues());
+		return queryForMapBySql(sqlObject.getSql(), sqlObject.getValues());
 	}
 
 	@Override
@@ -182,7 +182,7 @@ public abstract class AbstractQuery implements Query {
 	@Override
 	public <T> T queryForObject(Class<T> requiredType) {
 		SqlObject sqlObject = createSelect(getSelectFields());
-		return queryForObject(sqlObject.getSql(), sqlObject.getValues().toArray(), requiredType);
+		return queryForObjectBySql(sqlObject.getSql(), sqlObject.getValues().toArray(), requiredType);
 	}
 
 	@Override
@@ -203,7 +203,7 @@ public abstract class AbstractQuery implements Query {
 	@Override
 	public <T> List<T> queryForList(Class<T> elementType) {
 		SqlObject sqlObject = createSelect(getSelectFields());
-		return queryForList(sqlObject.getSql(), sqlObject.getValues().toArray(), elementType);
+		return queryForListBySql(sqlObject.getSql(), sqlObject.getValues().toArray(), elementType);
 	}
 
 	@Override
@@ -224,7 +224,7 @@ public abstract class AbstractQuery implements Query {
 	@Override
 	public List<Map<String, Object>> queryForList() {
 		SqlObject sqlObject = createSelect(getSelectFields());
-		return queryForList(sqlObject.getSql(), sqlObject.getValues());
+		return queryForListBySql(sqlObject.getSql(), sqlObject.getValues());
 	}
 
 	@Override

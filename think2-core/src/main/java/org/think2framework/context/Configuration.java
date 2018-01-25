@@ -7,9 +7,7 @@ import java.util.Map;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.think2framework.context.bean.Datasource;
-import org.think2framework.context.bean.Model;
-import org.think2framework.context.bean.Param;
+import org.think2framework.context.bean.*;
 import org.think2framework.core.OrmFactory;
 import org.think2framework.core.exception.MessageFactory;
 import org.think2framework.core.utils.FileUtils;
@@ -21,8 +19,10 @@ public class Configuration implements ApplicationContextAware {
 
 	private static boolean datasourceInitialized = false; // 数据源是否初始化
 	private static boolean messageInitialized = false; // 系统消息是否初始化
+	private static boolean modelContextInitialized = false; // 系统模型语境是否初始化
 	private static boolean modelInitialized = false; // 系统模型是否初始化
 	private static boolean paramInitialized = false; // 系统参数是否初始化
+	private static boolean apiInitialized = false; // 系统接口是否初始化
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -80,6 +80,29 @@ public class Configuration implements ApplicationContextAware {
 	}
 
 	/**
+	 * 初始化模型语境，模型与数据库的关系
+	 * 
+	 * @param modelContext
+	 *            模型语境
+	 */
+	public void setModelContext(String modelContext) {
+		// 初始化的时候会被多次调用，如果已经有配置说明初始化过，不需要再初始化
+		if (modelContextInitialized) {
+			return;
+		}
+		File[] files = FileUtils.getFiles(this.getClass().getResource("/").getPath() + modelContext);
+		if (null == files) {
+			return;
+		}
+		for (File file : files) {
+			List<ModelContext> modelContexts = JsonUtils.readFile(file, new TypeReference<List<ModelContext>>() {
+			});
+			ModelFactory.appendContext(modelContexts);
+		}
+		modelContextInitialized = true;
+	}
+
+	/**
 	 * 初始化模型信息
 	 *
 	 * @param model
@@ -120,11 +143,32 @@ public class Configuration implements ApplicationContextAware {
 		for (File file : files) {
 			List<Param> params = JsonUtils.readFile(file, new TypeReference<List<Param>>() {
 			});
-			for (Param p : params) {
-				ParamFactory.append(p);
-			}
+			ParamFactory.append(params);
 		}
 		paramInitialized = true;
+	}
+
+	/**
+	 * 初始化系统接口
+	 * 
+	 * @param api
+	 *            系统接口
+	 */
+	public void setApi(String api) {
+		// 初始化的时候会被多次调用，如果已经有配置说明初始化过，不需要再初始化
+		if (apiInitialized) {
+			return;
+		}
+		File[] files = FileUtils.getFiles(this.getClass().getResource("/").getPath() + api);
+		if (null == files) {
+			return;
+		}
+		for (File file : files) {
+			List<Api> apis = JsonUtils.readFile(file, new TypeReference<List<Api>>() {
+			});
+			ApiFactory.append(apis);
+		}
+		apiInitialized = true;
 	}
 
 	// /**

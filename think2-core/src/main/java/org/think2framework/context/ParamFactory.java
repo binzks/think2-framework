@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.think2framework.context.bean.Param;
-import org.think2framework.core.OrmFactory;
 import org.think2framework.core.datasource.Query;
 import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.exception.SystemMessage;
@@ -21,6 +20,21 @@ public class ParamFactory {
 	private static final Logger logger = LogManager.getLogger(ParamFactory.class);
 
 	private static Map<String, Param> paramMap = new HashMap<>(); // 基本参数配置
+
+	/**
+	 * 批量追加参数定义
+	 * 
+	 * @param params
+	 *            参数定义
+	 */
+	public static synchronized void append(List<Param> params) {
+		if (null == params) {
+			return;
+		}
+		for (Param param : params) {
+			append(param);
+		}
+	}
 
 	/**
 	 * 追加一个系统参数，如果参数没有定义模型则表示纯静态参数，添加到constants

@@ -28,7 +28,7 @@ public class Sqlserver extends AbstractDatasource {
 
 	@Override
 	public Field createField(FieldType fieldType, String name, Boolean nullable, String join, String alias,
-                             String defaultValue, Integer length, Integer scale, String comment) {
+			Integer length, Integer scale, String comment) {
 		return null;
 	}
 

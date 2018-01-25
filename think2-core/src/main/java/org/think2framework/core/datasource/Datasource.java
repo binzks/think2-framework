@@ -37,8 +37,6 @@ public interface Datasource {
 	 *            关联名称
 	 * @param alias
 	 *            别名
-	 * @param defaultValue
-	 *            默认值
 	 * @param length
 	 *            长度
 	 * @param scale
@@ -47,8 +45,8 @@ public interface Datasource {
 	 *            注释
 	 * @return 字段
 	 */
-	Field createField(FieldType fieldType, String name, Boolean nullable, String join, String alias,
-                      String defaultValue, Integer length, Integer scale, String comment);
+	Field createField(FieldType fieldType, String name, Boolean nullable, String join, String alias, Integer length,
+			Integer scale, String comment);
 
 	/**
 	 * 根据数据源创建一个查询生成器

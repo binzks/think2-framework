@@ -25,13 +25,15 @@ public class Column {
 
 	private Boolean edit = true; // 编辑页面是否需要列，默认true
 
+	private String defaultValue; // 默认值
+
 	private String param; // 系统参数名称
 
 	public Column() {
 	}
 
 	public Column(String name, FieldType type, Boolean nullable, String title, Boolean search, Boolean display,
-			Boolean detail, Boolean add, Boolean edit, String param) {
+			Boolean detail, Boolean add, Boolean edit, String defaultValue, String param) {
 		this.name = name;
 		this.type = type;
 		this.nullable = nullable;
@@ -41,6 +43,7 @@ public class Column {
 		this.detail = detail;
 		this.add = add;
 		this.edit = edit;
+		this.defaultValue = defaultValue;
 		this.param = param;
 	}
 
@@ -114,6 +117,14 @@ public class Column {
 
 	public void setEdit(Boolean edit) {
 		this.edit = edit;
+	}
+
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 
 	public String getParam() {

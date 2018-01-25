@@ -36,6 +36,21 @@ public class ModelFactory {
 	private static Map<String, View> viewMap = new HashMap<>(); // 视图
 
 	/**
+	 * 批量追加模型语境
+	 * 
+	 * @param modelContexts
+	 *            模型语境
+	 */
+	public static synchronized void appendContext(List<ModelContext> modelContexts) {
+		if (null == modelContexts) {
+			return;
+		}
+		for (ModelContext modelContext : modelContexts) {
+			appendContext(modelContext);
+		}
+	}
+
+	/**
 	 * 追加一个模型语境，如果已经存在则警告，不追加
 	 *
 	 * @param modelContext
@@ -47,7 +62,22 @@ public class ModelFactory {
 			logger.warn("模型语境[{}]已经存在，忽略追加！", name);
 		} else {
 			modelContextMap.put(name, modelContext);
-			logger.debug("追加模型语境[{}][{}]！", name);
+			logger.debug("追加模型语境[{}]！", name);
+		}
+	}
+
+	/**
+	 * 批量追加模型
+	 *
+	 * @param models
+	 *            模型
+	 */
+	public static synchronized void append(List<Model> models) {
+		if (null == models) {
+			return;
+		}
+		for (Model model : models) {
+			append(model);
 		}
 	}
 
@@ -66,9 +96,9 @@ public class ModelFactory {
 		String pk = model.getPk();
 		fieldMap.put(pk, datasource.createPrimaryField(pk, model.getAutoIncrement()));
 		if (model.getAutoIncrement()) {
-			columnMap.put(pk, new Column(pk, FieldType.INT, false, "主键", false, false, true, false, false, ""));
+			columnMap.put(pk, new Column(pk, FieldType.INT, false, "主键", false, false, true, false, false, null, ""));
 		} else {
-			columnMap.put(pk, new Column(pk, FieldType.TEXT, false, "主键", false, false, true, false, false, ""));
+			columnMap.put(pk, new Column(pk, FieldType.TEXT, false, "主键", false, false, true, false, false, null, ""));
 		}
 		for (Cell cell : model.getCells()) {
 			String name = cell.getName();
@@ -76,9 +106,11 @@ public class ModelFactory {
 				name = cell.getAlias();
 			}
 			fieldMap.put(name, datasource.createField(cell.getType(), name, cell.getNullable(), cell.getJoin(),
-					cell.getAlias(), cell.getDefaultValue(), cell.getLength(), cell.getScale(), cell.getComment()));
-			columnMap.put(name, new Column(name, cell.getType(), cell.getNullable(), cell.getTitle(), cell.getSearch(),
-					cell.getDisplay(), cell.getDetail(), cell.getAdd(), cell.getEdit(), cell.getParam()));
+					cell.getAlias(), cell.getLength(), cell.getScale(), cell.getComment()));
+			columnMap.put(name,
+					new Column(name, cell.getType(), cell.getNullable(), cell.getTitle(), cell.getSearch(),
+							cell.getDisplay(), cell.getDetail(), cell.getAdd(), cell.getEdit(), cell.getDefaultValue(),
+							cell.getParam()));
 		}
 		OrmFactory.append(model.getName(),
 				new Entity(model.getTable(), model.getPk(), model.getAutoIncrement(), fieldMap, model.getFilters(),
@@ -101,18 +133,6 @@ public class ModelFactory {
 		} else {
 			viewMap.put(name, view);
 			logger.debug("追加视图[{}][{}]！", name);
-		}
-	}
-
-	/**
-	 * 批量追加模型
-	 *
-	 * @param models
-	 *            模型
-	 */
-	public static synchronized void append(List<Model> models) {
-		for (Model model : models) {
-			append(model);
 		}
 	}
 
@@ -199,4 +219,18 @@ public class ModelFactory {
 		return OrmFactory.createWriter(name, writer);
 	}
 
+	/**
+	 * 根据名称获取一个视图
+	 * 
+	 * @param name
+	 *            名称
+	 * @return 视图
+	 */
+	public static View getView(String name) {
+		View view = viewMap.get(name);
+		if (null == view) {
+			throw new MessageException(SystemMessage.NON_EXIST.getCode(), "视图" + name);
+		}
+		return view;
+	}
 }

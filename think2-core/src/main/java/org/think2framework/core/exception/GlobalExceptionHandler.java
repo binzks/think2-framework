@@ -1,13 +1,8 @@
 package org.think2framework.core.exception;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.ModelAndView;
-import org.think2framework.core.utils.HttpServletUtils;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 //                            _ooOoo_
 //                           o8888888o
@@ -39,24 +34,26 @@ import org.think2framework.core.utils.HttpServletUtils;
 //                  奔驰宝马贵者趣，公交自行程序员。
 //                  别人笑我忒疯癫，我笑自己命太贱；
 //                  不见满街漂亮妹，哪个归得程序员？
+@EnableWebMvc
+@RestControllerAdvice()
+public class GlobalExceptionHandler {
 
-/**
- * 统一的异常处理,返回错误页面
- */
-public class ExceptionHandler implements HandlerExceptionResolver {
+	// 空指针异常
+	@ExceptionHandler(NullPointerException.class)
+	public String nullPointerExceptionHandler(NullPointerException ex) {
+		return MessageFactory.getJson(SystemMessage.NULL_POINTER.getCode(), ex.getStackTrace()[0].toString());
+	}
 
-	private static Logger logger = LogManager.getLogger(ExceptionHandler.class); // log4j日志对象
+	// 消息错误
+	@ExceptionHandler(MessageException.class)
+	public String messageException(Exception ex) {
+		return ex.getMessage();
+	}
 
-	@Override
-	public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-			Object o, Exception e) {
-		logger.error(e);
-		String message = e.getMessage();
-		if (MessageException.class != e.getClass()) {
-			message = MessageFactory.getJson(SystemMessage.UNKNOWN.getCode(), message);
-		}
-		HttpServletUtils.writeResponse(httpServletResponse, message);
-		return new ModelAndView();
+	// 其他错误
+	@ExceptionHandler(Exception.class)
+	public String exception(Exception ex) {
+		return MessageFactory.getJson(SystemMessage.UNKNOWN.getCode(), ex.getMessage());
 	}
 
 }

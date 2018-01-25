@@ -26,7 +26,7 @@ public class Oracle extends AbstractDatasource {
 	}
 
 	@Override
-	public Field createField(FieldType fieldType, String name, Boolean nullable, String join, String alias, String defaultValue, Integer length, Integer scale, String comment) {
+	public Field createField(FieldType fieldType, String name, Boolean nullable, String join, String alias, Integer length, Integer scale, String comment) {
 		return null;
 	}
 

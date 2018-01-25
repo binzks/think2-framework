@@ -27,8 +27,8 @@ public class Mysql extends AbstractDatasource {
 
 	@Override
 	public Field createField(FieldType fieldType, String name, Boolean nullable, String join, String alias,
-                             String defaultValue, Integer length, Integer scale, String comment) {
-		return new MysqlField(fieldType, name, nullable, join, alias, length, scale, defaultValue, comment);
+			Integer length, Integer scale, String comment) {
+		return new MysqlField(fieldType, name, nullable, join, alias, length, scale, comment);
 	}
 
 	@Override

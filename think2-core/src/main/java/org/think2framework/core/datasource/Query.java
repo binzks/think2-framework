@@ -21,7 +21,7 @@ public interface Query {
 	 *            类
 	 * @return 类对象
 	 */
-	<T> T queryForObject(String sql, Object[] args, Class<T> requiredType);
+	<T> T queryForObjectBySql(String sql, Object[] args, Class<T> requiredType);
 
 	/**
 	 * 执行一个自定义sql,获取map对象
@@ -32,7 +32,7 @@ public interface Query {
 	 *            参数值
 	 * @return map
 	 */
-	Map<String, Object> queryForMap(String sql, Object... args);
+	Map<String, Object> queryForMapBySql(String sql, Object... args);
 
 	/**
 	 * 执行一个自定义sql,获取对象数组
@@ -45,7 +45,7 @@ public interface Query {
 	 *            类
 	 * @return 类对象数组
 	 */
-	<T> List<T> queryForList(String sql, Object[] args, Class<T> elementType);
+	<T> List<T> queryForListBySql(String sql, Object[] args, Class<T> elementType);
 
 	/**
 	 * 执行一个自定义sql,获取map数组
@@ -56,7 +56,7 @@ public interface Query {
 	 *            参数
 	 * @return map数组
 	 */
-	List<Map<String, Object>> queryForList(String sql, Object... args);
+	List<Map<String, Object>> queryForListBySql(String sql, Object... args);
 
 	/**
 	 * 获取查询数据返回的数量

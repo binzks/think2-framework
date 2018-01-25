@@ -10,7 +10,7 @@ public class PrimaryField extends AbstractField {
 	private String createSql; // 创建sql
 
 	public PrimaryField(String name, Boolean autoIncrement) {
-		super(name, false, null, null, null);
+		super(name, false, null, null);
 		setCreateSql(autoIncrement);
 	}
 

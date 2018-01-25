@@ -37,11 +37,4 @@ public interface Field {
 	 */
 	String createSql();
 
-	/**
-	 * 获取字段默认值，没有设置返回null，时间默认当前时间
-	 * 
-	 * @return 默认值
-	 */
-	String defaultValue();
-
 }
