@@ -19,12 +19,12 @@ import org.think2framework.core.utils.StringUtils;
 @RequestMapping(value = "/tpl")
 public class TemplateController {
 
-    @RequestMapping(value = "/list-{model}.api")
+    @RequestMapping(value = "/list-{model}.do")
     public String list(@PathVariable String model, HttpServletRequest request) {
         return "";
     }
 
-	@RequestMapping(value = "/add-{model}.api")
+	@RequestMapping(value = "/add-{model}.do")
 	public String add(@PathVariable String model,HttpServletRequest request) {
 		View view = ModelFactory.getView(model);
 		Map<String, Object> map = new HashMap<>();

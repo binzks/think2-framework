@@ -1,0 +1,7 @@
+[
+  {
+    "id": "0001",
+    "type": "HTTP_GET",
+    "url": "http://222.92.42.178:8083/webserviceforgis/webserviceforgis.asmx/GetPortAllDetail?dataType=hour&portId=all"
+  }
+]

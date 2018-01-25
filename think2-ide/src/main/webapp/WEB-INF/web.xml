@@ -27,7 +27,7 @@
     <servlet-mapping>
         <servlet-name>controller</servlet-name>
         <!--<url-pattern>/*</url-pattern>-->
-        <url-pattern>*.api</url-pattern>
+        <url-pattern>*.do</url-pattern>
     </servlet-mapping>
     <filter>
         <filter-name>sitemesh</filter-name>
