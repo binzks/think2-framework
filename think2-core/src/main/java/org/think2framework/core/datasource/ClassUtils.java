@@ -1,4 +1,4 @@
-package org.think2framework.core;
+package org.think2framework.core.datasource;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;

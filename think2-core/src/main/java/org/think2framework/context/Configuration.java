@@ -8,7 +8,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.think2framework.context.bean.*;
-import org.think2framework.core.OrmFactory;
+import org.think2framework.core.datasource.OrmFactory;
 import org.think2framework.core.exception.MessageFactory;
 import org.think2framework.core.utils.FileUtils;
 import org.think2framework.core.utils.JsonUtils;

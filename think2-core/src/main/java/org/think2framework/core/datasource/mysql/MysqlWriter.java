@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.think2framework.core.ClassUtils;
+import org.think2framework.core.datasource.ClassUtils;
 import org.think2framework.core.bean.SqlObject;
 import org.think2framework.core.datasource.AbstractWriter;
 import org.think2framework.core.datasource.Field;

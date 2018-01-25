@@ -1,4 +1,4 @@
-package org.think2framework.core.security;
+package org.think2framework.service.security;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

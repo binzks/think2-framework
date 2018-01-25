@@ -1,4 +1,4 @@
-package org.think2framework.core;
+package org.think2framework.core.datasource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.think2framework.core.bean.Entity;
-import org.think2framework.core.datasource.*;
 import org.think2framework.core.datasource.mysql.Mysql;
 import org.think2framework.core.datasource.oracle.Oracle;
 import org.think2framework.core.datasource.sqlite.Sqlite;

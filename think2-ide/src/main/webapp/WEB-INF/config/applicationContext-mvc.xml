@@ -32,7 +32,7 @@
 
     <!-- Controller Service -->
     <context:component-scan
-            base-package="org.think2framework.core.exception,org.think2framework.core.controller,org.think2framework.ide.controller"/>
+            base-package="org.think2framework.core.exception,org.think2framework.service.controller,org.think2framework.ide.controller"/>
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
@@ -50,7 +50,7 @@
             <mvc:exclude-mapping path="/**/*.jpg"/>
             <mvc:exclude-mapping path="/**/*.jpeg"/>
             <!--排除拦截-->
-            <bean class="org.think2framework.core.security.SecurityInterceptor"/>
+            <bean class="org.think2framework.service.security.SecurityInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

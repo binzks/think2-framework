@@ -1,4 +1,4 @@
-package org.think2framework.core.security;//package org.think2framework.webmvc.security;
+package org.think2framework.service.security;//package org.think2framework.webmvc.security;
 //
 //import java.util.List;
 //

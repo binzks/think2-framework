@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.think2framework.core.ClassUtils;
 import org.think2framework.core.bean.SqlObject;
 import org.think2framework.core.utils.StringUtils;
 

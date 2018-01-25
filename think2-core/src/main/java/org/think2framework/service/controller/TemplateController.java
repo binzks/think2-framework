@@ -1,4 +1,4 @@
-package org.think2framework.core.controller;
+package org.think2framework.service.controller;
 
 import java.util.HashMap;
 import java.util.Map;

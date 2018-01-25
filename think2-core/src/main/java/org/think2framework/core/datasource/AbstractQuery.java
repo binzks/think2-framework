@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.think2framework.core.ClassUtils;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Order;
 import org.think2framework.core.bean.SqlObject;

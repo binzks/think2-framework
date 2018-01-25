@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.think2framework.context.bean.Cell;
 import org.think2framework.context.bean.Model;
 import org.think2framework.context.bean.ModelContext;
-import org.think2framework.core.OrmFactory;
+import org.think2framework.core.datasource.OrmFactory;
 import org.think2framework.core.bean.Column;
 import org.think2framework.core.bean.Entity;
 import org.think2framework.core.bean.View;

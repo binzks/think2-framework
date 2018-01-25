@@ -1,4 +1,4 @@
-package org.think2framework.core.security;
+package org.think2framework.service.security;
 
 import org.think2framework.context.ModelFactory;
 import org.think2framework.core.bean.View;
