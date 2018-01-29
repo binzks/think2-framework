@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +14,6 @@ import org.think2framework.core.bean.Column;
 import org.think2framework.core.bean.View;
 import org.think2framework.core.datasource.Writer;
 import org.think2framework.core.exception.MessageFactory;
-import org.think2framework.core.utils.StringUtils;
 
 @RestController
 @RequestMapping(value = "/tpl")

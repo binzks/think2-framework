@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.think2framework.core.bean.Filter;
 import org.think2framework.core.bean.Join;
@@ -13,7 +14,6 @@ import org.think2framework.core.datasource.AbstractQuery;
 import org.think2framework.core.datasource.Field;
 import org.think2framework.core.datasource.Operator;
 import org.think2framework.core.datasource.Redis;
-import org.think2framework.core.utils.StringUtils;
 
 /**
  * mysql查询生成器
@@ -85,35 +85,41 @@ public class MysqlQuery extends AbstractQuery implements Cloneable {
 			List<Object> values = filter.getValues();
 			Operator operator = filter.getOperator();
 			sql.append(" AND ").append(filter.getKey()).append(" ");
-			if (Operator.EQUAL == operator) {
-				if (null == values) {
-					throw new RuntimeException("运算符[=]没有过滤值！");
-				}
-				sql.append("= ?");
-				sqlValues.add(values.get(0));
-			} else if (Operator.BETWEEN == operator) {
-				if (null == values || values.size() < 2) {
-					throw new RuntimeException("运算符[between]没有两个过滤值！");
-				}
-				sql.append("BETWEEN ? AND ?");
-				sqlValues.add(values.get(0));
-				sqlValues.add(values.get(1));
-			} else if (Operator.IN == operator || Operator.NOT_IN == operator) {
-				if (null == values) {
-					throw new RuntimeException("运算符[" + operator.toString() + "]没有过滤值！");
-				}
-				StringBuilder in = new StringBuilder();
-				for (Object value : values) {
-					in.append(",?");
-					sqlValues.add(value);
-				}
-				sql.append(operator.toString()).append("(").append(in.substring(1)).append(")");
-			} else {
-				sql.append(operator.toString());
-				if (null != values) {
-					sql.append(" ?");
+			switch (operator) {
+				case EQUAL:
+					if (null == values) {
+						throw new RuntimeException("运算符[=]没有过滤值！");
+					}
+					sql.append("= ?");
 					sqlValues.add(values.get(0));
-				}
+					break;
+				case BETWEEN:
+					if (null == values || values.size() < 2) {
+						throw new RuntimeException("运算符[between]没有两个过滤值！");
+					}
+					sql.append("BETWEEN ? AND ?");
+					sqlValues.add(values.get(0));
+					sqlValues.add(values.get(1));
+					break;
+				case IN:
+				case NOT_IN:
+					if (null == values) {
+						throw new RuntimeException("运算符[" + operator.toString() + "]没有过滤值！");
+					}
+					StringBuilder in = new StringBuilder();
+					for (Object value : values) {
+						in.append(",?");
+						sqlValues.add(value);
+					}
+					sql.append(operator.toString()).append("(").append(in.substring(1)).append(")");
+					break;
+				default:
+					sql.append(operator.toString());
+					if (null != values) {
+						sql.append(" ?");
+						sqlValues.add(values.get(0));
+					}
+					break;
 			}
 		}
 		return new SqlObject(sql.toString(), sqlValues);

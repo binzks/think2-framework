@@ -3,9 +3,9 @@ package org.think2framework.core.exception;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.think2framework.core.utils.StringUtils;
 
 /**
  * 消息工厂,主要用于处理系统的错误和正确消息提示 错误内容中?代表需要替换为其他参数
@@ -47,7 +47,7 @@ public class MessageFactory {
 	 */
 	public static synchronized void append(Map<String, Object> map) {
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
-			append(entry.getKey(), StringUtils.toString(entry.getValue()));
+			append(entry.getKey(), null == entry.getValue() ? "" : entry.getValue().toString());
 		}
 	}
 

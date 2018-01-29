@@ -36,8 +36,6 @@ public class MailUtils {
 	 *            发送给哪些邮箱，多个用,隔开
 	 * @param content
 	 *            邮件内容
-	 * @throws Exception
-	 *             异常
 	 */
 	public static void sendTextMail(String host, Integer port, String user, String password, String subject, String to,
 			String content) {
@@ -61,8 +59,6 @@ public class MailUtils {
 	 *            发送给哪些邮箱，多个用,隔开
 	 * @param content
 	 *            邮件内容
-	 * @throws Exception
-	 *             异常
 	 */
 	public static void sendMail(String host, Integer port, String user, String password, String subject, String to,
 			String content) {

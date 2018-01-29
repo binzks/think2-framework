@@ -1,6 +1,6 @@
 package org.think2framework.core.datasource;
 
-import org.think2framework.core.utils.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 抽象字段定义

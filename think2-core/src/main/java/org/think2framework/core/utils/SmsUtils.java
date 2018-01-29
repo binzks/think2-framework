@@ -25,15 +25,6 @@ public class SmsUtils {
 	private static String ifId = "api";
 	private static String ifName = "zhengsutao";
 
-	private static String param = "<x:Envelope xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\""
-			+ " xmlns:ser=\"http://www.csapi.org/service\" xmlns:sms=\"http://www.csapi.org/schema/sms\">"
-			+ "<x:Header/><x:Body><ser:sendSms><ser:sendSmsRequest><sms:ApplicationID>%s</sms:ApplicationID>"
-			+ "<sms:DestinationAddresses>tel:%s</sms:DestinationAddresses><sms:ExtendCode>%s</sms:ExtendCode>"
-			+ "<sms:Message>%s</sms:Message><sms:MessageFormat>%s</sms:MessageFormat>"
-			+ "<sms:SendMethod>%s</sms:SendMethod><sms:DeliveryResultRequest>%s</sms:DeliveryResultRequest>"
-			+ "<sms:apPassword>%s</sms:apPassword><sms:intfid>%s</sms:intfid><sms:intfname>%s</sms:intfname>"
-			+ "</ser:sendSmsRequest></ser:sendSms></x:Body></x:Envelope>";
-
 	public static void config(String url, String applicationID, String extendCode, String messageFormat,
 			String sendMethod, String deliveryResultRequest, String apPassword, String interfaceId,
 			String interfaceName) {
@@ -58,6 +49,14 @@ public class SmsUtils {
 	 */
 	public static String sendMessage(String phones, String message) {
 		try {
+			String param = "<x:Envelope xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\""
+					+ " xmlns:ser=\"http://www.csapi.org/service\" xmlns:sms=\"http://www.csapi.org/schema/sms\">"
+					+ "<x:Header/><x:Body><ser:sendSms><ser:sendSmsRequest><sms:ApplicationID>%s</sms:ApplicationID>"
+					+ "<sms:DestinationAddresses>tel:%s</sms:DestinationAddresses><sms:ExtendCode>%s</sms:ExtendCode>"
+					+ "<sms:Message>%s</sms:Message><sms:MessageFormat>%s</sms:MessageFormat>"
+					+ "<sms:SendMethod>%s</sms:SendMethod><sms:DeliveryResultRequest>%s</sms:DeliveryResultRequest>"
+					+ "<sms:apPassword>%s</sms:apPassword><sms:intfid>%s</sms:intfid><sms:intfname>%s</sms:intfname>"
+					+ "</ser:sendSmsRequest></ser:sendSms></x:Body></x:Envelope>";
 			String params = String.format(param, appId, phones, eCode, message, mFormat, sMethod, dRequest, aPsw, ifId,
 					ifName);
 			CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -67,8 +66,7 @@ public class SmsUtils {
 			stringEntity.setContentEncoding("utf-8");
 			stringEntity.setContentType("text/xml");
 			httpPost.setEntity(stringEntity);
-			CloseableHttpResponse response = httpClient.execute(httpPost);
-			try {
+			try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 				if (response.getStatusLine().getStatusCode() != 200) {
 					throw new Exception("http response status line " + response.getStatusLine());
 				}
@@ -76,8 +74,6 @@ public class SmsUtils {
 				String result = EntityUtils.toString(entity, "utf-8");
 				EntityUtils.consume(entity);
 				return result;
-			} finally {
-				response.close();
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);

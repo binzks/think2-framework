@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * xml工具
@@ -209,8 +210,8 @@ public class XmlUtils {
 	 */
 	public static String escape(String input) {
 		String xml = input;
-		for (int i = 0; i < BASIC_ESCAPE.length; i++) {
-			xml = StringUtils.replace(xml, BASIC_ESCAPE[i][0], BASIC_ESCAPE[i][1]);
+		for (String[] aBASIC_ESCAPE : BASIC_ESCAPE) {
+			xml = StringUtils.replace(xml, aBASIC_ESCAPE[0], aBASIC_ESCAPE[1]);
 		}
 		return xml;
 	}
@@ -224,8 +225,8 @@ public class XmlUtils {
 	 */
 	public static String unescape(String input) {
 		String xml = input;
-		for (int i = 0; i < BASIC_ESCAPE.length; i++) {
-			xml = StringUtils.replace(xml, BASIC_ESCAPE[i][1], BASIC_ESCAPE[i][0]);
+		for (String[] aBASIC_ESCAPE : BASIC_ESCAPE) {
+			xml = StringUtils.replace(xml, aBASIC_ESCAPE[1], aBASIC_ESCAPE[0]);
 		}
 		return xml;
 	}

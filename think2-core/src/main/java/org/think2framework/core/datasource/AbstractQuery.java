@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,7 +15,6 @@ import org.think2framework.core.bean.Order;
 import org.think2framework.core.bean.SqlObject;
 import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.exception.SystemMessage;
-import org.think2framework.core.utils.StringUtils;
 
 /**
  * 抽象查询生成器

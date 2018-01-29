@@ -94,12 +94,12 @@ public class PackageUtils {
 			return;
 		}
 		// 如果存在就获取包下的所有文件包括目录
-		File[] dirFiles = dir.listFiles(new FileFilter() {
-			@Override
-			public boolean accept(File pathname) { // 自定义过滤规则,如果可以循环(包含子目录)或则是以.class结尾的文件(编译好的java类文件)
-				return (pathname.isDirectory()) || (pathname.getName().endsWith(".class"));
-			}
-		});
+		File[] dirFiles = dir.listFiles(pathname -> { // 自定义过滤规则,如果可以循环(包含子目录)或则是以.class结尾的文件(编译好的java类文件)
+            return (pathname.isDirectory()) || (pathname.getName().endsWith(".class"));
+        });
+		if (null == dirFiles){
+			return;
+		}
 		// 循环所有文件
 		for (File file : dirFiles) {
 			// 如果是目录 则继续扫描

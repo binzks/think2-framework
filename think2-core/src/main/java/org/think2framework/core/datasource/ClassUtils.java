@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.persistence.Cell;
 import org.think2framework.core.utils.JsonUtils;
-import org.think2framework.core.utils.StringUtils;
 
 /**
  * 类工具,主要处理类字段,读取和写入,以及创建实例
@@ -156,9 +156,9 @@ public class ClassUtils {
 			return null;
 		}
 		if (field.getType() == Boolean.class) {
-			return TRUE_VALUE.toString().equalsIgnoreCase(StringUtils.toString(value));
+			return TRUE_VALUE.toString().equalsIgnoreCase(value.toString());
 		} else if (field.getType().isArray() || (field.getGenericType() instanceof ParameterizedType)) {
-			return JsonUtils.readString(StringUtils.toString(value), field.getGenericType());
+			return JsonUtils.readString(value.toString(), field.getGenericType());
 		} else {
 			return value;
 		}
@@ -176,7 +176,7 @@ public class ClassUtils {
 			return null;
 		}
 		if (Boolean.class == value.getClass()) {
-			return Boolean.parseBoolean(StringUtils.toString(value)) ? TRUE_VALUE : FALSE_VALUE;
+			return Boolean.parseBoolean(value.toString()) ? TRUE_VALUE : FALSE_VALUE;
 		} else if (ArrayList.class == value.getClass() || value instanceof Object[]
 				|| value instanceof ParameterizedType) {
 			return JsonUtils.toString(value);

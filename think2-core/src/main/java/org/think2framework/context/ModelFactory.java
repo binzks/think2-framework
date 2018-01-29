@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.think2framework.context.bean.Cell;
@@ -22,7 +23,6 @@ import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.exception.SystemMessage;
 import org.think2framework.core.persistence.FieldType;
 import org.think2framework.core.utils.PackageUtils;
-import org.think2framework.core.utils.StringUtils;
 
 /**
  * 模型工厂

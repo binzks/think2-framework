@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.think2framework.context.bean.Param;
 import org.think2framework.core.datasource.Query;
 import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.exception.SystemMessage;
-import org.think2framework.core.utils.StringUtils;
 
 /**
  * 参数工厂，参数分为固定参数和可变参数，固定参数从常量配置获取对应分组，可变参数从数据库获取
@@ -82,7 +82,7 @@ public class ParamFactory {
 			List<Map<String, Object>> list = query.queryForList();
 			if (null != list) {
 				for (Map<String, Object> m : list) {
-					map.put(StringUtils.toString(m.get(key)), StringUtils.toString(m.get(display)));
+					m.putAll(map);
 				}
 			}
 		}

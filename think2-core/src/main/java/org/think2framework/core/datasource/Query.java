@@ -163,7 +163,6 @@ public interface Query {
 	 *            redis数据失效时间，0表示永久有效
 	 * @param value
 	 *            缓存数据
-	 * @return 是否缓存成功
 	 */
 	void setRedis(String key, Integer valid, Object value);
 

@@ -1,5 +1,7 @@
 package org.think2framework.core.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.regex.Matcher;
@@ -47,11 +49,7 @@ public class FileUtils {
 		@Override
 		public boolean accept(File dir, String name) {
 			Matcher matcher = pattern.matcher(name);
-			if (matcher.find()) {
-				return true;
-			} else {
-				return false;
-			}
+			return matcher.find();
 		}
 	}
 }

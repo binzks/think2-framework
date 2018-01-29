@@ -2,10 +2,10 @@ package org.think2framework.core.datasource.mysql;
 
 import static org.think2framework.core.persistence.FieldType.*;
 
+import org.apache.commons.lang3.StringUtils;
 import org.think2framework.core.datasource.AbstractField;
 import org.think2framework.core.datasource.Query;
 import org.think2framework.core.persistence.FieldType;
-import org.think2framework.core.utils.StringUtils;
 
 public class MysqlField extends AbstractField {
 

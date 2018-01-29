@@ -3,6 +3,7 @@ package org.think2framework.core.datasource;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.think2framework.core.bean.Entity;
@@ -12,7 +13,6 @@ import org.think2framework.core.datasource.sqlite.Sqlite;
 import org.think2framework.core.datasource.sqlserver.Sqlserver;
 import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.exception.SystemMessage;
-import org.think2framework.core.utils.StringUtils;
 
 /**
  * 数据持久化工厂

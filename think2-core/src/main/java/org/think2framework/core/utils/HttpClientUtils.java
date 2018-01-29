@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -50,7 +51,8 @@ public class HttpClientUtils {
 		if (null != params && params.size() > 0) {
 			List<NameValuePair> nameValuePairs = new ArrayList<>();
 			for (Map.Entry<String, Object> entry : params.entrySet()) {
-				nameValuePairs.add(new BasicNameValuePair(entry.getKey(), StringUtils.toString(entry.getValue())));
+				nameValuePairs.add(new BasicNameValuePair(entry.getKey(),
+						null == entry.getValue() ? "" : entry.getValue().toString()));
 			}
 			try {
 				return new UrlEncodedFormEntity(nameValuePairs, encoding);
@@ -79,9 +81,9 @@ public class HttpClientUtils {
 			UrlEncodedFormEntity entity = getUrlEncodedFormEntity(params, encoding);
 			if (null != entity) {
 				if (result.contains("?")) {
-					result += "&" + StringUtils.toString(entity);
+					result += "&" + entity.toString();
 				} else {
-					result += "?" + StringUtils.toString(entity);
+					result += "?" + entity.toString();
 				}
 			}
 		}

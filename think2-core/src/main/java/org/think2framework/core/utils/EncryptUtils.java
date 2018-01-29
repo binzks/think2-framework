@@ -68,7 +68,6 @@ public class EncryptUtils {
 	 * @param sKey
 	 *            密钥
 	 * @return AES加密 返回base64加密后的字符串
-	 * @throws Exception
 	 */
 	public static String AESEncrypt(String txt, String sKey) {
 		try {
@@ -93,8 +92,6 @@ public class EncryptUtils {
 	 * @param sKey
 	 *            加密密钥
 	 * @return 明文
-	 * @throws Exception
-	 *             异常
 	 */
 	public static String AESDecrypt(String txt, String sKey) {
 		try {

@@ -1,15 +1,18 @@
 package org.think2framework.core.datasource;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.think2framework.core.utils.JsonUtils;
-import org.think2framework.core.utils.NumberUtils;
-import org.think2framework.core.utils.StringUtils;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-
-import java.util.*;
 
 /**
  * redis数据库接口实现
@@ -58,8 +61,9 @@ public class Redis {
 		if (StringUtils.isBlank(key) || null == value) {
 			return;
 		}
-		Jedis jedis = jedisPool.getResource();
+		Jedis jedis = null;
 		try {
+			jedis = jedisPool.getResource();
 			String v = JsonUtils.toString(value);
 			if (seconds > 0) {
 				jedis.setex(key, seconds, v);
@@ -84,8 +88,9 @@ public class Redis {
 	 * @return 值
 	 */
 	public String get(String key) {
-		Jedis jedis = jedisPool.getResource();
+		Jedis jedis = null;
 		try {
+			jedis = jedisPool.getResource();
 			String value = jedis.get(key);
 			logger.debug("Redis {} get key {}", host, key);
 			return value;
@@ -174,8 +179,9 @@ public class Redis {
 	 *            关键字，可以多个
 	 */
 	public void delete(String... key) {
-		Jedis jedis = jedisPool.getResource();
+		Jedis jedis = null;
 		try {
+			jedis = jedisPool.getResource();
 			jedis.del(key);
 			logger.debug("Redis {} delete key {}", host, key);
 		} catch (Exception e) {
@@ -194,8 +200,9 @@ public class Redis {
 	 *            关键字前缀
 	 */
 	public void deleteKeys(String prefix) {
-		Jedis jedis = jedisPool.getResource();
+		Jedis jedis = null;
 		try {
+			jedis = jedisPool.getResource();
 			Set<String> keys = jedis.keys(prefix + "*");
 			for (String key : keys) {
 				jedis.del(key);

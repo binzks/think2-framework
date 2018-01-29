@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.think2framework.core.datasource.ClassUtils;
 import org.think2framework.core.bean.SqlObject;
@@ -11,7 +12,6 @@ import org.think2framework.core.datasource.AbstractWriter;
 import org.think2framework.core.datasource.Field;
 import org.think2framework.core.exception.MessageException;
 import org.think2framework.core.exception.SystemMessage;
-import org.think2framework.core.utils.StringUtils;
 
 public class MysqlWriter extends AbstractWriter {
 
